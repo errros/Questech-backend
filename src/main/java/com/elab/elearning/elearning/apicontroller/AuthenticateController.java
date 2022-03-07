@@ -5,6 +5,7 @@ import com.elab.elearning.elearning.jwt.JWTUtility;
 import com.elab.elearning.elearning.jwt.JwtRequestModel;
 import com.elab.elearning.elearning.jwt.JwtResponseModel;
 import com.elab.elearning.elearning.authentication.ApplicationUserService;
+
 import com.elab.elearning.elearning.authentication.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 
+
+
 //contain one endpoint /authenticate used to generate JWT
+//pre added users in the resources database ("admin","admin","admin@admin.com","ADMIN") ,
+// ("student","student","student@student.com","STUDENT")
+// ("professor","professor","professor@professor.com","PROFESSOR")
 public class AuthenticateController {
 
     @Autowired
@@ -35,7 +41,7 @@ public class AuthenticateController {
 
     
    //requestbody contains(username,password)
-    // validate credentials (login) and generate jwt that will be used in all the upcoming HTTP requests
+    // validate credentials (login) and generate jwt that will be used in all the upcoming HTTP requests for the token valid time
     @PostMapping("/authenticate")
     public JwtResponseModel authenticate(@RequestBody JwtRequestModel jwtRequestModel) throws Exception{
 
