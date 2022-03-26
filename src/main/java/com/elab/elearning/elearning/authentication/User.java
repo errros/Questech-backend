@@ -1,17 +1,20 @@
 package com.elab.elearning.elearning.authentication;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
-
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(unique = true)
     private String username;
     //password should be at least 9 characters long
@@ -21,19 +24,7 @@ public class User {
     ///ADMIN,STUDENT,PROFESSOR
     private String Role;
     @Column(unique = true)
-
     private String email;
-
-    public User() {
-    }
-
-    public User(Long id, String username, String password, String email, String role) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        Role = role;
-    }
 
     public User(String username, String password, String email, String role) {
         this.username = username;
@@ -43,54 +34,4 @@ public class User {
     }
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getRole() {
-        return Role;
-    }
-
-    public void setRole(String role) {
-        Role = role;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", Role='" + Role + '\'' +
-                '}';
-    }
 }

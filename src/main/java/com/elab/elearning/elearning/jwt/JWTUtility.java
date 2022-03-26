@@ -21,7 +21,7 @@ public class JWTUtility implements Serializable {
     private static final long serialVersionUID = 234234523523L;
 
     //token expires in 5 hours
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 60*60*5;
 
 
     //the jwt secretkey is defined in application.yml file
@@ -52,7 +52,7 @@ public class JWTUtility implements Serializable {
 
 
     //check if the token has expired
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }

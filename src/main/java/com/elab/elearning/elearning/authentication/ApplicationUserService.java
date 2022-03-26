@@ -24,9 +24,22 @@ public class ApplicationUserService implements UserDetailsService {
 
 
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Optional<User> user = userRepository.findByEmail(username);
+
+
+        if(user.isEmpty()){
+            throw new UsernameNotFoundException(String.format("user %s doesn't exist",username));
+        }else{
+            return   new ApplicationUserDetails(user.get());
+        }
+
+    }
+
+
+    public UserDetails realLoadUserByUsername(String username) throws UsernameNotFoundException {
 
         Optional<User> user = userRepository.findByUsername(username);
 
