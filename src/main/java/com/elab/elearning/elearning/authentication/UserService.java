@@ -2,6 +2,7 @@ package com.elab.elearning.elearning.authentication;
 
 
 import com.elab.elearning.elearning.model.UserRegistration;
+import com.elab.elearning.elearning.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,11 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private MailService mailService;
 
+
+    
     public User register(UserRegistration user) {
         String plainPassword = generateRandomPassword();
 
@@ -25,6 +30,10 @@ public class UserService {
         userRepository.save(userWithCipherPassword);
        Optional<User> userWithPlainPassowrd = userRepository.findByEmail(user.getEmail());
         userWithPlainPassowrd.get().setPassword(plainPassword);
+        mailService.sendEmailtoUser(userWithPlainPassowrd.get().getEmail(),userWithPlainPassowrd.get().getPassword(),
+                userWithPlainPassowrd.get().getRole()
+                );
+
         return userWithPlainPassowrd.get() ;
 
     }
