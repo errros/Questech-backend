@@ -6,9 +6,8 @@ import com.elab.elearning.elearning.jwt.JwtRequestModel;
 import com.elab.elearning.elearning.jwt.JwtResponseModel;
 import com.elab.elearning.elearning.authentication.ApplicationUserService;
 
-import com.elab.elearning.elearning.authentication.UserService;
+import com.elab.elearning.elearning.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

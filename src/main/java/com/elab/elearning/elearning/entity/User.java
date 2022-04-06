@@ -1,6 +1,7 @@
-package com.elab.elearning.elearning.authentication;
+package com.elab.elearning.elearning.entity;
 
 
+import com.elab.elearning.elearning.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

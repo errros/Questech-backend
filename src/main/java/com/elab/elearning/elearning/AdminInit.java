@@ -1,9 +1,8 @@
 package com.elab.elearning.elearning;
 
-import com.elab.elearning.elearning.authentication.User;
-import com.elab.elearning.elearning.authentication.UserRepository;
-import com.elab.elearning.elearning.authentication.UserRole;
-import jdk.jfr.Category;
+import com.elab.elearning.elearning.entity.User;
+import com.elab.elearning.elearning.repository.UserRepository;
+import com.elab.elearning.elearning.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

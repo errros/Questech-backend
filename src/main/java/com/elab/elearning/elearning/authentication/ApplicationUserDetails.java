@@ -1,5 +1,6 @@
 package com.elab.elearning.elearning.authentication;
 
+import com.elab.elearning.elearning.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +11,7 @@ import java.util.Collections;
 
 public class ApplicationUserDetails implements UserDetails {
 
-    private User user;
+    private final User user;
 
     public ApplicationUserDetails(User user) {
         super();

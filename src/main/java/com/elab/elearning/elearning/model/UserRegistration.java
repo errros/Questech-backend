@@ -1,13 +1,9 @@
 package com.elab.elearning.elearning.model;
 
-import com.elab.elearning.elearning.authentication.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.*;
 import java.sql.Date;
 
