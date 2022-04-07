@@ -21,7 +21,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/admin")
 @PreAuthorize(value = "hasAuthority('ADMIN')")
-//admin control panel endpoints
+@CrossOrigin(origins = "*")
 public class AdminController {
 
 
@@ -58,7 +58,6 @@ public class AdminController {
 
     @PutMapping("user/{id}")
     @Operation(summary = "update user profile / change his password", security = {@SecurityRequirement(name = "bearer-key")})
-
     public User update(@RequestParam Optional<String> username, @RequestParam Optional<String> familName,
                        @RequestParam Optional<String> firstName, @RequestParam Optional<Date> birthDate,
                        @RequestParam Optional<String> placeBirth, @RequestParam Optional<String> oldPassword,
