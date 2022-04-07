@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 // ("professor","professor","professor@professor.com","PROFESSOR")
 
 @RestController
-@CrossOrigin(origins = "*")
 public class AuthenticateController {
 
     @Autowired

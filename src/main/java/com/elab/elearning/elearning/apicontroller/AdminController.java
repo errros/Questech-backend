@@ -21,7 +21,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/admin")
 @PreAuthorize(value = "hasAuthority('ADMIN')")
-@CrossOrigin(origins = "*")
 //admin control panel endpoints
 public class AdminController {
 
