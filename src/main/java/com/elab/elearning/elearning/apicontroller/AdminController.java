@@ -19,9 +19,9 @@ import java.util.Optional;
 
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/admin")
 @PreAuthorize(value = "hasAuthority('ADMIN')")
-@CrossOrigin(origins = "*")
 public class AdminController {
 
 
