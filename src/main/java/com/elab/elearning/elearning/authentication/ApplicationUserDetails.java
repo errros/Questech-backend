@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 
+
 public class ApplicationUserDetails implements UserDetails {
 
     private final User user;

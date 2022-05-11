@@ -1,12 +1,17 @@
 package com.elab.elearning.elearning;
 
+import com.elab.elearning.elearning.entity.Professor;
 import com.elab.elearning.elearning.entity.User;
+import com.elab.elearning.elearning.model.Promo;
+import com.elab.elearning.elearning.repository.ModuleRepository;
 import com.elab.elearning.elearning.repository.UserRepository;
 import com.elab.elearning.elearning.model.UserRole;
+import com.elab.elearning.elearning.service.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import com.elab.elearning.elearning.entity.Module;
 
 import java.sql.Date;
 
@@ -22,6 +27,14 @@ public class AdminInit implements CommandLineRunner {
     private PasswordEncoder passwordEncoder;
 
 
+    @Autowired
+    private ProfessorService profService;
+@Autowired
+    private ModuleRepository moduleRepository;
+
+
+
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -34,6 +47,8 @@ public class AdminInit implements CommandLineRunner {
            userRepository.save(u);
 
        }
+
+
     }
 
 

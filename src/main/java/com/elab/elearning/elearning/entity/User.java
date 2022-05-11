@@ -8,13 +8,15 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class User {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -55,6 +57,7 @@ public class User {
     @Email
     private String email;
 
+
     public User(String firstname, String familyname, Date birthDate, String placeBirth , String password, UserRole role, String email) {
         this.username = firstname+"."+familyname+birthDate.toString();
         this.firstname = firstname;
@@ -65,4 +68,6 @@ public class User {
         this.role = role;
         this.email = email;
     }
+
+
 }

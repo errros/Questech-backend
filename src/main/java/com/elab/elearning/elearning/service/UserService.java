@@ -1,6 +1,8 @@
 package com.elab.elearning.elearning.service;
 
 
+import com.elab.elearning.elearning.entity.Professor;
+import com.elab.elearning.elearning.entity.Student;
 import com.elab.elearning.elearning.entity.User;
 import com.elab.elearning.elearning.repository.UserRepository;
 import com.elab.elearning.elearning.model.UserRole;
@@ -31,7 +33,10 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private MailService mailService;
-
+    @Autowired
+    private StudentService studentService;
+    @Autowired
+    private ProfessorService professorService;
 
     public void delete(Long id) {
         userRepository.deleteById(id);
@@ -68,26 +73,52 @@ public class UserService {
 
         userRepository.save(user);
 
-        return user;
+        return userRepository.getById(userid);
     }
+
+
 
 
     public User register(UserRegistration user, UserRole role) {
 
         String plainPassword = generateRandomPassword();
 
+            Optional<User> userWithPlainPassword = Optional.empty();
+        if(role == UserRole.PROFESSOR){
 
-        User userWithCipherPassword = new User(user.getFirstname(), user.getFamilyname(), user.getBirthDate(), user.getPlaceBirth(),
-                passwordEncoder.encode(plainPassword), role, user.getEmail());
-        System.out.println(userWithCipherPassword);
-        userRepository.save(userWithCipherPassword);
-        Optional<User> userWithPlainPassowrd = userRepository.findByEmail(user.getEmail());
-        userWithPlainPassowrd.get().setPassword(plainPassword);
-        mailService.sendEmailtoUser(userWithPlainPassowrd.get().getEmail(), userWithPlainPassowrd.get().getPassword(), role.name());
+                  userWithPlainPassword  = registerProf(user,plainPassword);
+                   userWithPlainPassword.get().setPassword(plainPassword);
 
-        return userWithPlainPassowrd.get();
+        } else if(role == UserRole.STUDENT) {
+             userWithPlainPassword = registerStudent(user, plainPassword);
+            userWithPlainPassword.get().setPassword(plainPassword);
+
+
+        };
+//        System.out.println(userWithCipherPassword);
+        mailService.sendEmailtoUser(userWithPlainPassword.get().getEmail(),userWithPlainPassword.get().getPassword(), role.name());
+
+         return userWithPlainPassword.get();
 
     }
+
+    private Optional<User> registerProf(UserRegistration user,String plainPassword){
+       Professor profWithCipherPassword = new Professor(user.getFirstname(),user.getFamilyname(),user.getBirthDate(),user.getPlaceBirth(),
+               passwordEncoder.encode(plainPassword),user.getEmail());
+         return professorService.add(profWithCipherPassword);
+    }
+
+
+
+    private  Optional<User> registerStudent(UserRegistration user,String plainPassword){
+        Student studWithCipherPassword = new Student(user.getFirstname(),user.getFamilyname(),user.getBirthDate(),user.getPlaceBirth(),
+                passwordEncoder.encode(plainPassword),user.getEmail());
+        return studentService.add(studWithCipherPassword);
+    }
+
+
+
+
 
     public String saveExcelSheet(MultipartFile file, UserRole role) throws IOException {
 
@@ -147,4 +178,5 @@ public class UserService {
     public Optional<User> getUser(Long id) {
         return userRepository.findById(id);
     }
+
 }
