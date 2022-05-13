@@ -3,6 +3,7 @@ package com.elab.elearning.elearning.apicontroller;
 import com.elab.elearning.elearning.entity.Module;
 import com.elab.elearning.elearning.entity.Professor;
 import com.elab.elearning.elearning.entity.User;
+import com.elab.elearning.elearning.message.ResponseMessage;
 import com.elab.elearning.elearning.model.Promo;
 import com.elab.elearning.elearning.model.UserRole;
 import com.elab.elearning.elearning.service.*;
@@ -10,6 +11,8 @@ import com.elab.elearning.elearning.model.UserRegistration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +41,8 @@ public class AdminController {
     @Autowired
     private ModuleService moduleService;
     //endpoint to register all the users ,requestbody is the entity user(username,password,email,role)
+    @Autowired
+    FileService storageService;
 
     @Operation(summary = "register a user", description = "the user id is attributed by RDBMS", security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("/user")
@@ -192,7 +197,18 @@ public class AdminController {
 
 
     }
-
+    @PostMapping("/upload/emploi-du-temps")
+    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+        String message = "";
+        try {
+            storageService.save(file);
+            message = "Uploaded successfully: " + file.getOriginalFilename();
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
+    }
 
 
     @GetMapping

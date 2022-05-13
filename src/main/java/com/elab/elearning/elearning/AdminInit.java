@@ -21,6 +21,7 @@ public class AdminInit implements CommandLineRunner {
 
     private static final String email = "admin@admin.com";
 
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -43,7 +44,6 @@ public class AdminInit implements CommandLineRunner {
            User u = new User("admin", "admin", Date.valueOf("1995-05-05")
                    , "world", passwordEncoder.encode("admin"), UserRole.ADMIN
                    , email);
-
            userRepository.save(u);
 
        }
