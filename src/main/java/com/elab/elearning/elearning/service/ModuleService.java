@@ -8,6 +8,7 @@ import com.elab.elearning.elearning.repository.ModuleRepository;
 import com.elab.elearning.elearning.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,8 +26,21 @@ public class ModuleService {
 
     }
 
-    public Module add(Module module) {
+
+
+    @Transactional
+    public Module add(Module module, Optional<Long> professorId) {
+        if(professorId.isPresent()) {
+           Professor p = professorRepository.getById(professorId.get());
+           Module m = moduleRepository.save(module);
+           m.setProfessor(p);
+           p.setModule(m);
+           professorRepository.save(p);
+        return module;
+        }
         moduleRepository.save(module);
+
+
     return module;
     }
 

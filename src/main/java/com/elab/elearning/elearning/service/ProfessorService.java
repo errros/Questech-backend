@@ -20,10 +20,10 @@ public class ProfessorService {
     @Autowired
     private ModuleRepository moduleRepository;
 
-    public Optional<User> add(Professor p) {
 
-        professorRepository.save(p);
-        return professorRepository.findByEmail(p.getEmail());
+
+    public void add(Professor p) {
+                professorRepository.save(p);
     }
 
 
