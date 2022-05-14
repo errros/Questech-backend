@@ -11,18 +11,11 @@ import javax.annotation.Resource;
 
 @SpringBootApplication
 @OpenAPIDefinition
-public class ELearningApplication implements CommandLineRunner {
-	@Resource
-	FileService storageService;
+public class ELearningApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ELearningApplication.class, args);
 	}
 
-		@Override
-		public void run(String... arg) throws Exception {
-			storageService.deleteAll();
-			storageService.init();
-		}
 
 }

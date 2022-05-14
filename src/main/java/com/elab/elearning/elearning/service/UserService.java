@@ -83,39 +83,38 @@ public class UserService {
 
         String plainPassword = generateRandomPassword();
 
+
             Optional<User> userWithPlainPassword = Optional.empty();
         if(role == UserRole.PROFESSOR){
 
-                  userWithPlainPassword  = registerProf(user,plainPassword);
-                   userWithPlainPassword.get().setPassword(plainPassword);
+                  registerProf(user,plainPassword);
+
 
         } else if(role == UserRole.STUDENT) {
-             userWithPlainPassword = registerStudent(user, plainPassword);
-            userWithPlainPassword.get().setPassword(plainPassword);
+              registerStudent(user, plainPassword);
 
 
         };
 //        System.out.println(userWithCipherPassword);
-        mailService.sendEmailtoUser(userWithPlainPassword.get().getEmail(),userWithPlainPassword.get().getPassword(), role.name());
+        mailService.sendEmailtoUser(user.getEmail(),plainPassword, role.name());
 
-         return userWithPlainPassword.get();
+         return userRepository.findByEmail(user.getEmail()).get();
 
     }
 
-    private Optional<User> registerProf(UserRegistration user,String plainPassword){
+    private void registerProf(UserRegistration user,String plainPassword){
        Professor profWithCipherPassword = new Professor(user.getFirstname(),user.getFamilyname(),user.getBirthDate(),user.getPlaceBirth(),
                passwordEncoder.encode(plainPassword),user.getEmail());
-         return professorService.add(profWithCipherPassword);
+          professorService.add(profWithCipherPassword);
     }
 
 
 
-    private  Optional<User> registerStudent(UserRegistration user,String plainPassword){
+    private  void registerStudent(UserRegistration user,String plainPassword){
         Student studWithCipherPassword = new Student(user.getFirstname(),user.getFamilyname(),user.getBirthDate(),user.getPlaceBirth(),
                 passwordEncoder.encode(plainPassword),user.getEmail());
-        return studentService.add(studWithCipherPassword);
+         studentService.add(studWithCipherPassword);
     }
-
 
 
 

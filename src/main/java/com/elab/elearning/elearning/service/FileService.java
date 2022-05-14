@@ -20,7 +20,10 @@ public class FileService {
 
     public void init() {
         try {
-            Files.createDirectory(root);
+            if(Files.notExists(root)) {
+                Files.createDirectory(root);
+
+            }
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }

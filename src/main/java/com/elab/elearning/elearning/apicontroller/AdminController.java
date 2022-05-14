@@ -166,9 +166,9 @@ public class AdminController {
 
     @Operation(summary = "add a module",  security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("module")
-    public Module add(@Valid @RequestBody Module module) {
+    public Module add(@Valid @RequestBody Module module,Optional<Long> professorId) {
 
-        return moduleService.add(module);
+        return moduleService.add(module,professorId);
 
     }
 
