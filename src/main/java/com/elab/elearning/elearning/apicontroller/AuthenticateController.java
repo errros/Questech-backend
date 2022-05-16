@@ -51,7 +51,6 @@ public class AuthenticateController {
     public JwtResponseModel authenticate(@RequestBody JwtRequestModel jwtRequestModel) throws Exception{
 
 
-        System.out.println("this is user email " + jwtRequestModel.getEmail());
 
         try {
             authenticationManager.authenticate(
@@ -71,7 +70,7 @@ public class AuthenticateController {
         final String token =
                 jwtUtility.generateToken(userDetails);
 
-        return  new JwtResponseModel(token);
+        return  new JwtResponseModel(token,userService.findByUsername(userDetails.getUsername()).get());
     }
 
 

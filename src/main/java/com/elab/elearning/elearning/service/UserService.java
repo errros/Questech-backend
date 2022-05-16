@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
@@ -169,6 +168,10 @@ public class UserService {
         return generatedString;
     }
 
+    public Optional<User> findByUsername(String username){
+
+        return userRepository.findByUsername(username);
+    }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
