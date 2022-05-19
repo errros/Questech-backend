@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 public class ProfessorService {
     @Autowired
-    private ProfessorRepository professorRepository;
+    private ProfessorRepository   professorRepository;
     @Autowired
     private ModuleRepository moduleRepository;
 
