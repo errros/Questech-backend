@@ -2,12 +2,15 @@ package com.elab.elearning.elearning.apicontroller;
 
 import com.elab.elearning.elearning.entity.Module;
 import com.elab.elearning.elearning.entity.Professor;
+import com.elab.elearning.elearning.entity.Student;
 import com.elab.elearning.elearning.entity.User;
 import com.elab.elearning.elearning.message.ResponseMessage;
+import com.elab.elearning.elearning.model.ProfessorRegistration;
 import com.elab.elearning.elearning.model.Promo;
+import com.elab.elearning.elearning.model.StudentRegistration;
 import com.elab.elearning.elearning.model.UserRole;
 import com.elab.elearning.elearning.service.*;
-import com.elab.elearning.elearning.model.UserRegistration;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,13 +47,26 @@ public class AdminController {
     @Autowired
     FileService storageService;
 
-    @Operation(summary = "register a user", description = "the user id is attributed by RDBMS", security = {@SecurityRequirement(name = "bearer-key")})
-    @PostMapping("/user")
-    public User register(@Valid @RequestBody UserRegistration user, @RequestParam(name = "role") UserRole role) {
+    @Operation(summary = "register a professor", description = "the user id is attributed by RDBMS", security = {@SecurityRequirement(name = "bearer-key")})
+    @PostMapping("/user/professor")
+    public Optional<Professor> register(@Valid @RequestBody ProfessorRegistration user) {
 
-        return userService.register(user, role);
+        return professorService.register(user);
 
     }
+
+    @Operation(summary = "register a student", description = "the user id is attributed by RDBMS", security = {@SecurityRequirement(name = "bearer-key")})
+    @PostMapping("/user/student")
+    public Student register(@Valid @RequestBody StudentRegistration user) {
+
+
+        return studentService.register(user).get();
+
+    }
+
+
+
+
 
     @GetMapping(value = "user")
     @Operation(summary = "retrieve all users", security = {@SecurityRequirement(name = "bearer-key")})
@@ -79,45 +95,67 @@ public class AdminController {
     }
 
 
+
+    @GetMapping(value = "user/student")
+    @Operation(summary = "retrieve all students", security = {@SecurityRequirement(name = "bearer-key")})
+    List<Student> getAllStudents() {
+
+        return studentService.getAllStudents();
+
+    }
+
+
     @GetMapping(value = "user/professor/{id}")
     @Operation(summary = "retrieve a single professor", security = {@SecurityRequirement(name = "bearer-key")})
-    Optional<Professor> getProfessor(@PathVariable("id") Long id) {
+    Optional<Professor> getProfessor(@PathVariable("id") Long id){
 
         return professorService.getProfessor(id);
 
     }
-//
-//    @PutMapping("user/professor/{id}")
-//    @Operation(summary = "update module for professor", security = {@SecurityRequirement(name = "bearer-key")})
-//    public User update(@RequestParam Optional<String> moduleId,@PathVariable("id") Long userid) {
-//
-//
-//
-//
-//        return professorService.updateInfos(moduleId,userid
-//        );
-//
-//
-//    }
-//
 
 
 
-        @PutMapping("user/{id}")
-    @Operation(summary = "update user profile / change his password", security = {@SecurityRequirement(name = "bearer-key")})
-    public User update(@RequestParam Optional<String> username, @RequestParam Optional<String> familName,
+    @GetMapping(value = "user/student/{id}")
+    @Operation(summary = "retrieve a single student", security = {@SecurityRequirement(name = "bearer-key")})
+    Optional<Student> getStudent(@PathVariable("id") Long id) {
+
+        return studentService.getStudent(id);
+
+    }
+
+
+
+    @PutMapping(value = "user/professor/{id}")
+    @Operation(summary = "update professor / change his password", security = {@SecurityRequirement(name = "bearer-key")})
+    Professor update(@RequestParam Optional<String> username, @RequestParam Optional<String> familName,
+                               @RequestParam Optional<String> firstName, @RequestParam Optional<Date> birthDate,
+                               @RequestParam Optional<String> placeBirth,@RequestParam Optional<String> phoneNumber,
+                               @RequestParam Optional<String> academicLevel,
+                               @RequestParam Optional<String> newPassword, @PathVariable("id") Long userid) {
+
+        return professorService.update(username,familName,firstName,birthDate,placeBirth,phoneNumber,academicLevel,newPassword,userid);
+
+    }
+
+
+    @PutMapping("student/{id}")
+    @Operation(summary = "update student profile / change his password", security = {@SecurityRequirement(name = "bearer-key")})
+    public Student update(@RequestParam Optional<String> username, @RequestParam Optional<String> familName,
                        @RequestParam Optional<String> firstName, @RequestParam Optional<Date> birthDate,
-                       @RequestParam Optional<String> placeBirth, @RequestParam Optional<String> oldPassword,
+                       @RequestParam Optional<String> placeBirth,
+
                        @RequestParam Optional<String> newPassword, @PathVariable("id") Long userid) {
 
-        return userService.updateInfos(username, familName,
+        return studentService.updateInfos(username, familName,
                 firstName, birthDate,
-                placeBirth, oldPassword,
+                placeBirth,
                 newPassword, userid
         );
 
 
     }
+
+
 
 
     @DeleteMapping("user/{id}")
@@ -133,7 +171,7 @@ public class AdminController {
             description = "excel file format : firstname , familyname , email , date of birth , place of birth ",
             security = {@SecurityRequirement(name = "bearer-key")})
     public String UploadExcelFileProf(@RequestParam("file") MultipartFile file) throws IOException {
-        userService.saveExcelSheet(file, UserRole.PROFESSOR);
+        professorService.saveExcelSheet(file);
         return "excel parsed and professors registred successfully";
     }
 
@@ -142,7 +180,7 @@ public class AdminController {
             description = "excel file format : firstname , familyname , email , date of birth , place of birth ",
             security = {@SecurityRequirement(name = "bearer-key")})
     public String UploadExcelFileStudent(@RequestParam("file") MultipartFile file) throws IOException {
-        userService.saveExcelSheet(file, UserRole.STUDENT);
+        studentService.saveExcelSheet(file);
         return "excel parsed and students registred successfully";
     }
 

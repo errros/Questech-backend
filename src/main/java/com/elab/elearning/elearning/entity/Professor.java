@@ -23,25 +23,49 @@ import java.sql.Date;
 public class Professor extends User implements Serializable{
 
 
+    @Column
+    private String phoneNumber;
+
+    @Column
+    private String academicLevel;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "module_id", referencedColumnName = "code",unique = true)
     private Module module;
 
 
 
-    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, String email, Module module) {
+    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, String email, Module module , String phoneNumber,String academicLevel) {
         super(firstname, familyname, birthDate, placeBirth, password, UserRole.PROFESSOR, email);
         this.module = module;
+        this.academicLevel = academicLevel;
+        this.phoneNumber = phoneNumber;
+
     }
 
-    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, String email) {
+    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, String email,String phoneNumber,String academicLevel) {
         super(firstname, familyname, birthDate, placeBirth, password, UserRole.PROFESSOR, email);
         this.module = null;
+        this.phoneNumber = phoneNumber;
+        this.academicLevel = academicLevel;
     }
 
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
+    public String getAcademicLevel() {
+        return academicLevel;
+    }
+
+    public void setAcademicLevel(String academicLevel) {
+        this.academicLevel = academicLevel;
+    }
 
     public Module getModule() {
         return module;

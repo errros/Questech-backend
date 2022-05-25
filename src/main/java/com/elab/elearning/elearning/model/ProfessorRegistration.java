@@ -1,17 +1,17 @@
 package com.elab.elearning.elearning.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.*;
+import lombok.Data;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.sql.Date;
 
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserRegistration {
+public class ProfessorRegistration {
 
 
     @NotNull
@@ -22,7 +22,7 @@ public class UserRegistration {
     private String familyname;
 
     @NotNull
-//    @Past
+    //@Past
     private Date birthDate;
     @NotNull
     @NotBlank
@@ -32,6 +32,11 @@ public class UserRegistration {
     @Email
     private String email;
 
+    @NotNull
+    private String phoneNumber;
+
+    @NotNull
+    private String academicLevel;
 
 
 

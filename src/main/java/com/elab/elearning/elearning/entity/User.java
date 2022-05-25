@@ -52,7 +52,7 @@ public class User{
     @Enumerated(EnumType.ORDINAL)
     ///ADMIN,STUDENT,PROFESSOR
     private UserRole role;
-    @Column
+    @Column(unique = true)
     @NotNull
     @Email
     private String email;

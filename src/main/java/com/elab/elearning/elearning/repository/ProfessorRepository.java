@@ -13,7 +13,7 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
 
 
     @Query
-    Optional<User> findByEmail(String email);
+    Optional<Professor> findByEmail(String email);
 
 
 }

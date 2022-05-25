@@ -6,7 +6,7 @@ import com.elab.elearning.elearning.entity.Student;
 import com.elab.elearning.elearning.entity.User;
 import com.elab.elearning.elearning.repository.UserRepository;
 import com.elab.elearning.elearning.model.UserRole;
-import com.elab.elearning.elearning.model.UserRegistration;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
@@ -43,11 +43,11 @@ public class UserService {
 
 
     //don't forget to add validators when updating a user
-
+/*
     public User updateInfos(Optional<String> username, Optional<String> familName,
                             Optional<String> firstName, Optional<Date> birthDate,
-                            Optional<String> placeBirth, Optional<String> oldPassword,
-                            Optional<String> newPassword, Long userid) {
+                            Optional<String> birth, Optional<String> password, Optional<String> placeBirth,
+                            Long userid) {
 
 
         User user = userRepository.findById(userid).get();
@@ -76,97 +76,7 @@ public class UserService {
     }
 
 
-
-
-    public User register(UserRegistration user, UserRole role) {
-
-        String plainPassword = generateRandomPassword();
-
-
-            Optional<User> userWithPlainPassword = Optional.empty();
-        if(role == UserRole.PROFESSOR){
-
-                  registerProf(user,plainPassword);
-
-
-        } else if(role == UserRole.STUDENT) {
-              registerStudent(user, plainPassword);
-
-
-        };
-//        System.out.println(userWithCipherPassword);
-        mailService.sendEmailtoUser(user.getEmail(),plainPassword, role.name());
-
-         return userRepository.findByEmail(user.getEmail()).get();
-
-    }
-
-    private void registerProf(UserRegistration user,String plainPassword){
-       Professor profWithCipherPassword = new Professor(user.getFirstname(),user.getFamilyname(),user.getBirthDate(),user.getPlaceBirth(),
-               passwordEncoder.encode(plainPassword),user.getEmail());
-          professorService.add(profWithCipherPassword);
-    }
-
-
-
-    private  void registerStudent(UserRegistration user,String plainPassword){
-        Student studWithCipherPassword = new Student(user.getFirstname(),user.getFamilyname(),user.getBirthDate(),user.getPlaceBirth(),
-                passwordEncoder.encode(plainPassword),user.getEmail());
-         studentService.add(studWithCipherPassword);
-    }
-
-
-
-
-    public String saveExcelSheet(MultipartFile file, UserRole role) throws IOException {
-
-        XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
-        // Read student data form excel file sheet.
-        XSSFSheet worksheet = workbook.getSheetAt(0);
-
-        for (int index = 0; index < worksheet.getPhysicalNumberOfRows(); index++) {
-            if (index > 0) {
-                XSSFRow row = worksheet.getRow(index);
-
-                UserRegistration user = new UserRegistration();
-                user.setFirstname(getCellValue(row, 0));
-                user.setFamilyname(getCellValue(row, 1));
-                user.setEmail(getCellValue(row, 2));
-                user.setBirthDate(Date.valueOf(getCellValue(row, 3)));
-                user.setPlaceBirth(getCellValue(row, 4));
-
-                //  students.add(student);
-                register(user, role);
-
-            }
-        }
-
-        return "sucess";
-    }
-
-    private String getCellValue(Row row, int cellNo) {
-        DataFormatter formatter = new DataFormatter();
-        Cell cell = row.getCell(cellNo);
-        return formatter.formatCellValue(cell);
-
-    }
-
-
-    public String generateRandomPassword() {
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 12;
-        Random random = new Random();
-
-        String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
-
-
-        return generatedString;
-    }
+*/
 
     public Optional<User> findByUsername(String username){
 
