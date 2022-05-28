@@ -5,6 +5,7 @@ import com.elab.elearning.elearning.entity.Professor;
 import com.elab.elearning.elearning.entity.Student;
 import com.elab.elearning.elearning.entity.User;
 import com.elab.elearning.elearning.model.StudentRegistration;
+import com.elab.elearning.elearning.model.UserRole;
 import com.elab.elearning.elearning.repository.StudentRepository;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
@@ -29,7 +31,8 @@ public class StudentService {
     private StudentRepository studentRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private MailService mailService;
 
 
     public Optional<Student> register(StudentRegistration user) {
@@ -39,6 +42,8 @@ public class StudentService {
         ,passwordEncoder.encode(plainpasswrod),user.getEmail());
 
         studentRepository.save(s);
+
+        mailService.sendEmailtoUser(s.getEmail(), plainpasswrod, UserRole.STUDENT.name());
 
         return studentRepository.findByEmail(s.getEmail());
 
@@ -115,40 +120,33 @@ public class StudentService {
            return student;
     }
 
-    public Student updateInfos(Optional<String> username, Optional<String> familName, Optional<String> firstName, Optional<Date> birthDate, Optional<String> placeBirth, Optional<String> newPassword, Long userid) {
-
-        Optional<Student> userOpt = studentRepository.findById(userid);
-
-        if(userOpt.isPresent()) {
-            Student user = userOpt.get();
-            if (username.isPresent()) {
-                user.setUsername(username.get());
-            }
-            if (familName.isPresent()) {
-                user.setFamilyname(familName.get());
-            }
-            if (firstName.isPresent()) {
-                user.setFirstname(firstName.get());
-            }
-            if (birthDate.isPresent()) {
-                user.setBirthDate(birthDate.get());
-            }
-            if (placeBirth.isPresent()) {
-                user.setPlaceBirth(placeBirth.get());
-            }
-            if (newPassword.isPresent()) {
-                user.setPassword(passwordEncoder.encode(newPassword.get()));
-            }
 
 
-            studentRepository.save(user);
+    @Transactional
+    public Student updateInfos(Student student) {
 
-            return studentRepository.getById(userid);
+        Optional<Student> userOpt = studentRepository.findById(student.getId());
 
-        } else
-            return new Student();
+
+        Student user = userOpt.get();
+
+        user.setUsername(student.getUsername());
+
+        user.setFamilyname(student.getFamilyname());
+
+        user.setFirstname(student.getFirstname());
+
+        user.setBirthDate(student.getBirthDate());
+
+        user.setPlaceBirth(student.getPlaceBirth());
+
+        user.setPassword(passwordEncoder.encode(student.getPassword()));
+
+        studentRepository.save(user);
+
+        return studentRepository.getById(user.getId()); }
 
 
 
-    }
+
 }

@@ -125,33 +125,20 @@ public class AdminController {
 
 
 
-    @PutMapping(value = "user/professor/{id}")
-    @Operation(summary = "update professor / change his password", security = {@SecurityRequirement(name = "bearer-key")})
-    Professor update(@RequestParam Optional<String> username, @RequestParam Optional<String> familName,
-                               @RequestParam Optional<String> firstName, @RequestParam Optional<Date> birthDate,
-                               @RequestParam Optional<String> placeBirth,@RequestParam Optional<String> phoneNumber,
-                               @RequestParam Optional<String> academicLevel,
-                               @RequestParam Optional<String> newPassword, @PathVariable("id") Long userid) {
+    @PutMapping("student/{id}")
+    @Operation(summary = "update student profile / change his password", security = {@SecurityRequirement(name = "bearer-key")})
+    public Student update(@RequestBody Student student) {
 
-        return professorService.update(username,familName,firstName,birthDate,placeBirth,phoneNumber,academicLevel,newPassword,userid);
+        return studentService.updateInfos(student);
+
 
     }
 
+    @PutMapping(value = "user/professor/{id}")
+    @Operation(summary = "update professor / change his password", security = {@SecurityRequirement(name = "bearer-key")})
+    Professor update(@RequestBody  Professor professor) {
 
-    @PutMapping("student/{id}")
-    @Operation(summary = "update student profile / change his password", security = {@SecurityRequirement(name = "bearer-key")})
-    public Student update(@RequestParam Optional<String> username, @RequestParam Optional<String> familName,
-                       @RequestParam Optional<String> firstName, @RequestParam Optional<Date> birthDate,
-                       @RequestParam Optional<String> placeBirth,
-
-                       @RequestParam Optional<String> newPassword, @PathVariable("id") Long userid) {
-
-        return studentService.updateInfos(username, familName,
-                firstName, birthDate,
-                placeBirth,
-                newPassword, userid
-        );
-
+        return professorService.updateInfo(professor);
 
     }
 

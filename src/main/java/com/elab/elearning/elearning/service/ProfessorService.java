@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
@@ -34,6 +35,9 @@ public class ProfessorService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private MailService mailService;
+
 
     public void add(Professor p) {
         professorRepository.save(p);
@@ -43,6 +47,8 @@ public class ProfessorService {
     public Optional<Professor> getProfessor(Long id) {
         return professorRepository.findById(id);
     }
+
+
 
     public List<Professor> getAllProfessors() {
         return professorRepository.findAll();
@@ -56,46 +62,36 @@ public class ProfessorService {
     }
 
 
-    public Professor update(Optional<String> username, Optional<String> familName, Optional<String> firstName, Optional<Date> birthDate, Optional<String> placeBirth, Optional<String> phoneNumber, Optional<String> academicLevel, Optional<String> newPassword, Long userid) {
 
-        Optional<Professor> userOpt = professorRepository.findById(userid);
-        if (userOpt.isPresent()) {
-            Professor user = userOpt.get();
-            if (username.isPresent()) {
-                user.setUsername(username.get());
-            }
-            if (familName.isPresent()) {
-                user.setFamilyname(familName.get());
-            }
-            if (firstName.isPresent()) {
-                user.setFirstname(firstName.get());
-            }
-            if (birthDate.isPresent()) {
-                user.setBirthDate(birthDate.get());
-            }
-            if (placeBirth.isPresent()) {
-                user.setPlaceBirth(placeBirth.get());
-            }
-            if (newPassword.isPresent()) {
-                user.setPassword(passwordEncoder.encode(newPassword.get()));
-            }
-            if (phoneNumber.isPresent()) {
-                user.setPhoneNumber(phoneNumber.get());
-            }
-            if (academicLevel.isPresent()) {
-                user.setAcademicLevel(academicLevel.get());
-            }
+@Transactional
+    public Professor updateInfo(Professor user1) {
 
+        Optional<Professor> userOpt = professorRepository.findById(user1.getId());
 
-            professorRepository.save(user);
+        Professor user = userOpt.get();
 
-            return professorRepository.getById(userid);
-        } else {
-            return new Professor();
-        }
+        user.setUsername(user1.getUsername());
+        user.setFamilyname(user1.getFamilyname());
 
+        user.setFirstname(user1.getFirstname());
 
+        user.setBirthDate(user1.getBirthDate());
+
+        user.setPlaceBirth(user1.getPlaceBirth());
+
+        user.setPassword(passwordEncoder.encode(user1.getPassword()));
+
+        user.setPhoneNumber(user1.getPhoneNumber());
+
+        user.setAcademicLevel(user1.getAcademicLevel());
+
+        professorRepository.save(user);
+
+        return professorRepository.getById(user1.getId());
     }
+
+
+
 
     public Optional<Professor> register(ProfessorRegistration user) {
 
@@ -105,6 +101,8 @@ public class ProfessorService {
 
         professorRepository.save(s);
 
+
+        mailService.sendEmailtoUser(s.getEmail(), plainpasswrod, UserRole.PROFESSOR.name());
         return professorRepository.findByEmail(s.getEmail());
 
 
