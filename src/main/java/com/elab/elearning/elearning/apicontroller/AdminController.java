@@ -1,9 +1,7 @@
 package com.elab.elearning.elearning.apicontroller;
 
+import com.elab.elearning.elearning.entity.*;
 import com.elab.elearning.elearning.entity.Module;
-import com.elab.elearning.elearning.entity.Professor;
-import com.elab.elearning.elearning.entity.Student;
-import com.elab.elearning.elearning.entity.User;
 import com.elab.elearning.elearning.message.ResponseMessage;
 import com.elab.elearning.elearning.model.ProfessorRegistration;
 import com.elab.elearning.elearning.model.Promo;
@@ -45,7 +43,11 @@ public class AdminController {
     private ModuleService moduleService;
     //endpoint to register all the users ,requestbody is the entity user(username,password,email,role)
     @Autowired
-    FileService storageService;
+    private FileService storageService;
+
+    @Autowired
+    private LocationService locationService;
+
 
     @Operation(summary = "register a professor", description = "the user id is attributed by RDBMS", security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("/user/professor")
@@ -115,6 +117,7 @@ public class AdminController {
 
 
 
+
     @GetMapping(value = "user/student/{id}")
     @Operation(summary = "retrieve a single student", security = {@SecurityRequirement(name = "bearer-key")})
     Optional<Student> getStudent(@PathVariable("id") Long id) {
@@ -172,56 +175,7 @@ public class AdminController {
     }
 
 
-    @GetMapping(value = "module")
-    @Operation(summary = "retrieve all modules", security = {@SecurityRequirement(name = "bearer-key")})
-    List<Module> getAllModules() {
 
-        return moduleService.getAllModules();
-
-    }
-
-
-    @GetMapping(value = "module/{code}")
-    @Operation(summary = "retrieve a single module", security = {@SecurityRequirement(name = "bearer-key")})
-    Optional<Module> getModule(@PathVariable("code") String code) {
-
-        return moduleService.getModule(code);
-
-    }
-
-    @Operation(summary = "add a module",  security = {@SecurityRequirement(name = "bearer-key")})
-    @PostMapping("module")
-    public Module add(@Valid @RequestBody Module module,Optional<Long> professorId) {
-
-        return moduleService.add(module,professorId);
-
-    }
-
-
-
-
-    @DeleteMapping("module/{code}")
-    @Operation(summary = "delete a module", security = {@SecurityRequirement(name = "bearer-key")})
-
-    public void delete(@PathVariable("code") String code) {
-        moduleService.delete(code);
-    }
-
-
-
-
-
-    @PutMapping("module/{code}")
-    @Operation(summary = "update module", security = {@SecurityRequirement(name = "bearer-key")})
-    public Module update(@RequestParam Optional<String> detailedName,
-                         @RequestParam Optional<Promo> promo , @Valid @RequestParam Optional<Integer> semester,
-                         @Valid @RequestParam Optional<Integer> coefficient, @Valid @RequestParam Optional<Integer> credit,
-                         @Valid @RequestParam Optional<Long> professorId, @PathVariable("code") String code) {
-
-        return  moduleService.update(code,detailedName,promo,semester,coefficient,credit,professorId);
-
-
-    }
     @PostMapping("/upload/emploi-du-temps")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
@@ -234,6 +188,40 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }
+
+
+    @Operation(summary = "add a location",  security = {@SecurityRequirement(name = "bearer-key")})
+    @PostMapping("location")
+    public Location add(@Valid @RequestBody Location location) {
+
+        return locationService.add(location);
+
+    }
+
+
+    @GetMapping(value = "location")
+    @Operation(summary = "retrieve all locations", security = {@SecurityRequirement(name = "bearer-key")})
+    List<Location> getAllLocations() {
+
+        return locationService.getAllLocations();
+
+    }
+
+
+    @GetMapping(value = "location/{id}")
+    @Operation(summary = "retrieve a single location", security = {@SecurityRequirement(name = "bearer-key")})
+    Optional<Location> getLocation(@PathVariable("id") Long id) {
+
+        return locationService.getLocation(id);
+
+    }
+    @DeleteMapping("location/{id}")
+    @Operation(summary = "delete a location", security = {@SecurityRequirement(name = "bearer-key")})
+
+    public void deleteLocation(@PathVariable("id") int id) {
+        locationService.delete((long) id);
+    }
+
 
 
     @GetMapping

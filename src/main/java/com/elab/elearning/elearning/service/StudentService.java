@@ -39,7 +39,7 @@ public class StudentService {
 
         String plainpasswrod = generateRandomPassword();
         Student s = new Student(user.getFirstname(),user.getFamilyname(),user.getBirthDate(),user.getPlaceBirth()
-        ,passwordEncoder.encode(plainpasswrod),user.getEmail());
+        ,passwordEncoder.encode(plainpasswrod),user.getSex(),user.getEmail());
 
         studentRepository.save(s);
 
@@ -66,7 +66,7 @@ public class StudentService {
                 user.setEmail(getCellValue(row, 2));
                 user.setBirthDate(Date.valueOf(getCellValue(row, 3)));
                 user.setPlaceBirth(getCellValue(row, 4));
-
+                user.setSex(getCellValue(row,5));
                 //  students.add(student);
                 register(user);
 

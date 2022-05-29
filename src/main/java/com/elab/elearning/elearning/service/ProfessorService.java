@@ -97,7 +97,7 @@ public class ProfessorService {
 
         String plainpasswrod = generateRandomPassword();
         Professor s = new Professor(user.getFirstname(), user.getFamilyname(), user.getBirthDate(), user.getPlaceBirth()
-                , passwordEncoder.encode(plainpasswrod), user.getEmail(), user.getPhoneNumber(), user.getAcademicLevel());
+                , passwordEncoder.encode(plainpasswrod),user.getSex(), user.getEmail(),user.getPhoneNumber(), user.getAcademicLevel());
 
         professorRepository.save(s);
 
@@ -127,6 +127,7 @@ public class ProfessorService {
                 user.setPlaceBirth(getCellValue(row, 4));
                 user.setPhoneNumber(getCellValue(row, 5));
                 user.setAcademicLevel(getCellValue(row, 6));
+                user.setSex(getCellValue(row,7));
 
                 //  students.add(student);
                 register(user);

@@ -1,6 +1,7 @@
 package com.elab.elearning.elearning.entity;
 
 
+import com.elab.elearning.elearning.model.Sex;
 import com.elab.elearning.elearning.model.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,6 +15,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -29,23 +33,27 @@ public class Professor extends User implements Serializable{
     @Column
     private String academicLevel;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "module_id", referencedColumnName = "code",unique = true)
-    private Module module;
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,CascadeType.REMOVE
+    })
+    @JoinTable(name = "teach",
+            joinColumns = @JoinColumn(name = "profid"),
+            inverseJoinColumns = @JoinColumn(name = "modulecode"))
+    private Set<Module> modules = new HashSet<>();
 
 
 
-    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, String email, Module module , String phoneNumber,String academicLevel) {
-        super(firstname, familyname, birthDate, placeBirth, password, UserRole.PROFESSOR, email);
-        this.module = module;
+    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, String email, Sex sex , Set<Module> modules , String phoneNumber, String academicLevel) {
+        super(firstname, familyname, birthDate, placeBirth, password, UserRole.PROFESSOR, sex ,email);
+        this.modules = modules;
         this.academicLevel = academicLevel;
         this.phoneNumber = phoneNumber;
 
     }
 
-    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, String email,String phoneNumber,String academicLevel) {
-        super(firstname, familyname, birthDate, placeBirth, password, UserRole.PROFESSOR, email);
-        this.module = null;
+    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, Sex sex , String email,String phoneNumber,String academicLevel) {
+        super(firstname, familyname, birthDate, placeBirth, password, UserRole.PROFESSOR,sex, email);
         this.phoneNumber = phoneNumber;
         this.academicLevel = academicLevel;
     }
@@ -67,11 +75,11 @@ public class Professor extends User implements Serializable{
         this.academicLevel = academicLevel;
     }
 
-    public Module getModule() {
-        return module;
+    public Set<Module> getModules() {
+        return modules;
     }
 
-    public void setModule(Module module) {
-        this.module = module;
+    public void setModules(Set<Module> modules) {
+        this.modules = modules;
     }
 }

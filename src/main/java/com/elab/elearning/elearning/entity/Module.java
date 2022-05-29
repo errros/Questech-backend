@@ -14,6 +14,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -44,21 +48,26 @@ public class Module{
     @Min(value = 1)
     private int credit;
 
-    @OneToOne(mappedBy = "module" , cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE,
+            },
+            mappedBy = "modules")
     @JsonIgnore
-    private Professor professor;
+    private Set<Professor> professors = new HashSet<>();
 
     public Module() {
     }
 
-    public Module(String code, String detailedName, Promo promo, int semester, int coefficient, int credit, Professor professor) {
+    public Module(String code, String detailedName, Promo promo, int semester, int coefficient, int credit, Set<Professor> professors) {
         this.code = code;
         this.detailedName = detailedName;
         this.promo = promo;
         this.semester = semester;
         this.coefficient = coefficient;
         this.credit = credit;
-        this.professor = professor;
+        this.professors = professors;
     }
 
 
@@ -70,7 +79,6 @@ public class Module{
         this.semester = semester;
         this.coefficient = coefficient;
         this.credit = credit;
-        this.professor = null;
     }
 
 
@@ -123,13 +131,23 @@ public class Module{
         this.credit = credit;
     }
 
-    public Professor getProfessor() {
-        return professor;
+    public Set<Professor> getProfessors() {
+        return professors;
     }
 
-    public void setProfessor(Professor professor) {
-        this.professor = professor;
+    public void setProfessors(Set<Professor> professors) {
+        this.professors = professors;
     }
 
-
+    @Override
+    public String toString() {
+        return "Module{" +
+                "code='" + code + '\'' +
+                ", detailedName='" + detailedName + '\'' +
+                ", promo=" + promo +
+                ", semester=" + semester +
+                ", coefficient=" + coefficient +
+                ", credit=" + credit +
+                '}';
+    }
 }

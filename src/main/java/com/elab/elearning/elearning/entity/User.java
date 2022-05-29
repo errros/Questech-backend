@@ -1,6 +1,7 @@
 package com.elab.elearning.elearning.entity;
 
 
+import com.elab.elearning.elearning.model.Sex;
 import com.elab.elearning.elearning.model.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +43,8 @@ public class User{
     @NotBlank
     private String placeBirth;
 
+
+
     //password should be at least 9 characters long
     @Column
     @NotNull
@@ -52,13 +55,20 @@ public class User{
     @Enumerated(EnumType.ORDINAL)
     ///ADMIN,STUDENT,PROFESSOR
     private UserRole role;
+    @Column
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
+    ///FEMALE,MALE
+    private Sex sex;
+
+
     @Column(unique = true)
     @NotNull
     @Email
     private String email;
 
 
-    public User(String firstname, String familyname, Date birthDate, String placeBirth , String password, UserRole role, String email) {
+    public User(String firstname, String familyname, Date birthDate, String placeBirth , String password, UserRole role,Sex sex, String email) {
         this.username = firstname+"."+familyname+birthDate.toString();
         this.firstname = firstname;
         this.familyname = familyname;
@@ -67,6 +77,7 @@ public class User{
         this.password = password;
         this.role = role;
         this.email = email;
+        this.sex = sex;
     }
 
 

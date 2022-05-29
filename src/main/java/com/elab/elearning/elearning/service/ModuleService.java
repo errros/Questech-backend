@@ -7,12 +7,12 @@ import com.elab.elearning.elearning.model.Promo;
 import com.elab.elearning.elearning.repository.ModuleRepository;
 import com.elab.elearning.elearning.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ModuleService {
@@ -28,67 +28,97 @@ public class ModuleService {
 
 
 
-    @Transactional
-    public Module add(Module module, Optional<Long> professorId) {
-        if(professorId.isPresent()) {
-           Professor p = professorRepository.getById(professorId.get());
-           Module m = moduleRepository.save(module);
-           m.setProfessor(p);
-           p.setModule(m);
-           professorRepository.save(p);
-        return module;
-        }
+    public Module add(Module module) {
+
+        Set<Professor> professors = new HashSet<>();
         moduleRepository.save(module);
 
 
-    return module;
+        return module;
     }
+
+
+
 
     public void delete(String code) {
+
+
         moduleRepository.deleteById(code);
+        System.out.println( professorRepository.findAll());
+
+
+
+
     }
 
-    public Module update(String code, Optional<String> detailedName, Optional<Promo> promo, Optional<Integer> semester,
-                         Optional<Integer> coefficient, Optional<Integer> credit, @Valid Optional<Long> professorId) {
-
-
-      Module m = moduleRepository.getById(code);
-
-        if(detailedName.isPresent()){
-            m.setDetailedName(detailedName.get());
-        }
-
-        if(promo.isPresent()){
-            m.setPromo(promo.get());
-        }
-        if(semester.isPresent()){
-            m.setSemester(semester.get());
-        }
-
-        if(coefficient.isPresent()){
-            m.setCoefficient(coefficient.get());
-        }
-
-        if(credit.isPresent()){
-            m.setCredit(credit.get());
-        }
-
-
-        if(professorId.isPresent()){
-            Professor p = professorRepository.getById(professorId.get());
-            m.setProfessor(p);
-            p.setModule(m);
-            professorRepository.save(p);
-        }
-
-        moduleRepository.save(m);
-        return moduleRepository.getById(code);
-
-    }
 
     public Optional<Module> getModule(String code) {
         Optional<Module> m = Optional.of(moduleRepository.getById(code));
          return m;
+
+
+    }
+
+    public Module update(Module module) {
+
+    Optional<Module> moduleOpt = moduleRepository.findById(module.getCode());
+
+     if(moduleOpt.isPresent()) {
+         Module m = moduleOpt.get();
+
+         m.setDetailedName(module.getDetailedName());
+         m.setCredit(module.getCredit());
+         m.setCoefficient(module.getCoefficient());
+         m.setSemester(module.getSemester());
+         m.setPromo(module.getPromo());
+         moduleRepository.save(m);
+
+
+
+     }
+      return module;
+    }
+
+    public Module addProfessorToModule(String code, Long id) {
+       Optional<Module> module = moduleRepository.findById(code);
+       if(module.isPresent()){
+           Optional<Professor> professor = professorRepository.findById(id);
+           if(professor.isPresent()){
+
+               professor.get().getModules().add(module.get());
+               module.get().getProfessors().add(professor.get());
+               moduleRepository.save(module.get());
+               professorRepository.save(professor.get());
+           }
+
+
+       }
+
+
+        return module.get();
+    }
+
+    public Module deleteProfessorFromModule(String code, Long id) {
+
+        Optional<Module> module = moduleRepository.findById(code);
+
+        if(module.isPresent()){
+            Optional<Professor> professor = professorRepository.findById(id);
+            if(professor.isPresent()){
+
+                module.get().getProfessors().remove(professor.get());
+                professor.get().getModules().remove(module.get());
+                moduleRepository.save(module.get());
+                professorRepository.save(professor.get());
+            }
+
+
+        }
+
+
+        return module.get();
+
+
 
 
     }

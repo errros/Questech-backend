@@ -3,6 +3,7 @@ package com.elab.elearning.elearning;
 import com.elab.elearning.elearning.entity.Professor;
 import com.elab.elearning.elearning.entity.User;
 import com.elab.elearning.elearning.model.Promo;
+import com.elab.elearning.elearning.model.Sex;
 import com.elab.elearning.elearning.repository.ModuleRepository;
 import com.elab.elearning.elearning.repository.UserRepository;
 import com.elab.elearning.elearning.model.UserRole;
@@ -40,7 +41,7 @@ public class Init implements CommandLineRunner {
 
        if(userRepository.findByEmail(email).isEmpty()) {
            User u = new User("admin", "admin", Date.valueOf("1995-05-05")
-                   , "world", passwordEncoder.encode("admin"), UserRole.ADMIN
+                   , "world", passwordEncoder.encode("admin"), UserRole.ADMIN,Sex.FEMALE
                    , email);
            userRepository.save(u);
 
