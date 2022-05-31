@@ -49,7 +49,7 @@ public class Init implements CommandLineRunner {
 
         if(userRepository.findByEmail(email).isEmpty()) {
            User u = new User("admin", "admin", Date.valueOf("1995-05-05")
-                   , "world", passwordEncoder.encode("admin"), UserRole.ADMIN,Sex.FEMALE
+                   , "world", passwordEncoder.encode("admin"), UserRole.ADMIN
                    , email);
            userRepository.save(u);
 
@@ -71,7 +71,7 @@ public class Init implements CommandLineRunner {
 
         if(professorRepository.findByEmail(email).isEmpty()) {
             Professor s = new Professor("professor", "professor", Date.valueOf("1995-05-05")
-                    , "world", passwordEncoder.encode("professor"),Sex.MALE
+                    , "world", passwordEncoder.encode("professor")
                     , email,"0790801843","prof level");
             professorRepository.save(s);
 

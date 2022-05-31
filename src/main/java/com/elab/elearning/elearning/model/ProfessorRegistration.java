@@ -37,12 +37,6 @@ public class ProfessorRegistration {
     @Email
     private String email;
 
-    @Column
-    @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    ///Male , FEMALE
-    private Sex sex;
-
     @NotNull
     private String phoneNumber;
 
@@ -90,13 +84,8 @@ public class ProfessorRegistration {
         this.email = email;
     }
 
-    public Sex getSex() {
-        return sex;
-    }
 
-    public void setSex(Sex sex) {
-        this.sex = sex;
-    }
+
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -114,15 +103,6 @@ public class ProfessorRegistration {
         this.academicLevel = academicLevel;
     }
 
-    public void setSex(String sex) {
-        if(sex.equals(Sex.MALE.name())){
-
-            this.sex = Sex.MALE;
-        }else if(sex.equals(Sex.FEMALE.name())){
-            this.sex = Sex.FEMALE;
-
-        }
-
     }
 
-}
+

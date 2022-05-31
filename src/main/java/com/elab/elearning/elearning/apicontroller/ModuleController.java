@@ -2,6 +2,7 @@ package com.elab.elearning.elearning.apicontroller;
 
 
 import com.elab.elearning.elearning.entity.Module;
+import com.elab.elearning.elearning.entity.Professor;
 import com.elab.elearning.elearning.service.ModuleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -13,6 +14,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+//module/assitants
+//module/responsable
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -53,7 +56,12 @@ public class ModuleController {
     @DeleteMapping("/{code}")
     @Operation(summary = "delete a module", security = {@SecurityRequirement(name = "bearer-key")})
     public void delete(@PathVariable("code") String code) {
+
+
         moduleService.delete(code);
+
+
+
     }
 
 
@@ -72,21 +80,58 @@ public class ModuleController {
 
 
 
-    @Operation(summary = "add a professor to a module",  security = {@SecurityRequirement(name = "bearer-key")})
-    @PostMapping("/{code}/professor")
-    public Module addProfessorToModule(@PathVariable("code") String code , @RequestParam("id") Long id) {
+    @Operation(summary = "add an assitant professor to a module",  security = {@SecurityRequirement(name = "bearer-key")})
+    @PutMapping("/{code}/assistant/{id}")
+    public Module addAssistantToModule(@PathVariable("code") String code , @PathVariable("id") Long id) {
 
-        return moduleService.addProfessorToModule(code,id);
+        return moduleService.addAssistantToModule(code,id);
+
+    }
+
+    @Operation(summary = "delete an assitant professor from a module",  security = {@SecurityRequirement(name = "bearer-key")})
+    @DeleteMapping("/{code}/assistant/{id}")
+    public Module deleteAssistantFromModule(@PathVariable("code") String code , @PathVariable("id") Long id) {
+
+        return moduleService.deleteAssistantFromModule(code,id);
 
     }
 
-    @Operation(summary = "delete a professor from a module",  security = {@SecurityRequirement(name = "bearer-key")})
-    @DeleteMapping("/{code}/professor")
-    public Module deleteProfessorFromModule(@PathVariable("code") String code , @RequestParam("id") Long id) {
 
-        return moduleService.deleteProfessorFromModule(code,id);
+
+    @Operation(summary = "chargé de cour",  security = {@SecurityRequirement(name = "bearer-key")})
+    @PutMapping("/{code}/responsable/{id}")
+    public Module setResponsableOfModule(@PathVariable("code") String code , @PathVariable("id") Long id) {
+
+        return moduleService.setResponsableToModule(code,id);
 
     }
+
+
+    @Operation(summary = "retrieve responsable professor of a given module",  security = {@SecurityRequirement(name = "bearer-key")})
+    @GetMapping("/{code}/responsable")
+    public Professor getResponsableOfModule(@PathVariable("code") String code) {
+
+        return moduleService.getModuleResponsable(code);
+
+    }
+
+    @Operation(summary = "retrieve assistant professors of a given module",  security = {@SecurityRequirement(name = "bearer-key")})
+    @PutMapping("/{code}/assistant")
+    public Set<Professor> getAssistantsOfModule(@PathVariable("code") String code) {
+
+        return moduleService.getAssistantsOfModule(code);
+
+    }
+
+    @Operation(summary = "delete chargé cour",  security = {@SecurityRequirement(name = "bearer-key")})
+    @PutMapping("/{code}/responsable")
+    public Module deleteResponsableOfModule(@PathVariable("code") String code) {
+
+        return moduleService.deleteResponsableOfModule(code);
+
+    }
+
+
 
 
 

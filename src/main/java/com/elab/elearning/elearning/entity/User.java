@@ -55,11 +55,7 @@ public class User{
     @Enumerated(EnumType.ORDINAL)
     ///ADMIN,STUDENT,PROFESSOR
     private UserRole role;
-    @Column
-    @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    ///FEMALE,MALE
-    private Sex sex;
+
 
 
     @Column(unique = true)
@@ -68,7 +64,7 @@ public class User{
     private String email;
 
 
-    public User(String firstname, String familyname, Date birthDate, String placeBirth , String password, UserRole role,Sex sex, String email) {
+    public User(String firstname, String familyname, Date birthDate, String placeBirth , String password, UserRole role, String email) {
         this.username = firstname+"."+familyname+birthDate.toString();
         this.firstname = firstname;
         this.familyname = familyname;
@@ -77,7 +73,7 @@ public class User{
         this.password = password;
         this.role = role;
         this.email = email;
-        this.sex = sex;
+
     }
 
 

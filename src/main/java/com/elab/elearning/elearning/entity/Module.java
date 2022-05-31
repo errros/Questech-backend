@@ -48,27 +48,29 @@ public class Module{
     @Min(value = 1)
     private int credit;
 
+
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE,
             },
-            mappedBy = "modules")
+            mappedBy = "modulesAssist")
     @JsonIgnore
-    private Set<Professor> professors = new HashSet<>();
+    private Set<Professor> assistants = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE,
+            })
+    @JoinColumn(name = "prof_id")
+    @JsonIgnore
+    private Professor responsable;
+
 
     public Module() {
     }
 
-    public Module(String code, String detailedName, Promo promo, int semester, int coefficient, int credit, Set<Professor> professors) {
-        this.code = code;
-        this.detailedName = detailedName;
-        this.promo = promo;
-        this.semester = semester;
-        this.coefficient = coefficient;
-        this.credit = credit;
-        this.professors = professors;
-    }
 
 
 
@@ -131,12 +133,21 @@ public class Module{
         this.credit = credit;
     }
 
-    public Set<Professor> getProfessors() {
-        return professors;
+
+    public Set<Professor> getAssistants() {
+        return assistants;
     }
 
-    public void setProfessors(Set<Professor> professors) {
-        this.professors = professors;
+    public void setAssistants(Set<Professor> assistants) {
+        this.assistants = assistants;
+    }
+
+    public Professor getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(Professor responsable) {
+        this.responsable = responsable;
     }
 
     @Override
@@ -148,6 +159,8 @@ public class Module{
                 ", semester=" + semester +
                 ", coefficient=" + coefficient +
                 ", credit=" + credit +
+                ", assistants=" + assistants +
+                ", responsable=" + responsable +
                 '}';
     }
 }

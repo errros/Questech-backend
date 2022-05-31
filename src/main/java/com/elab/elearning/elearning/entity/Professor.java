@@ -37,25 +37,26 @@ public class Professor extends User implements Serializable{
             CascadeType.PERSIST,
             CascadeType.MERGE,CascadeType.REMOVE
     })
-    @JoinTable(name = "teach",
+    @JoinTable(name = "assist",
             joinColumns = @JoinColumn(name = "profid"),
             inverseJoinColumns = @JoinColumn(name = "modulecode"))
-    private Set<Module> modules = new HashSet<>();
+    private Set<Module> modulesAssist = new HashSet<>();
+
+
+    @OneToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,CascadeType.REMOVE
+    } , mappedBy = "responsable")
+    private Set<Module> modulesResponsable = new HashSet<>();
 
 
 
 
 
-    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, String email, Sex sex , Set<Module> modules , String phoneNumber, String academicLevel) {
-        super(firstname, familyname, birthDate, placeBirth, password, UserRole.PROFESSOR, sex ,email);
-        this.modules = modules;
-        this.academicLevel = academicLevel;
-        this.phoneNumber = phoneNumber;
 
-    }
 
-    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, Sex sex , String email,String phoneNumber,String academicLevel) {
-        super(firstname, familyname, birthDate, placeBirth, password, UserRole.PROFESSOR,sex, email);
+    public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, String email,String phoneNumber,String academicLevel) {
+        super(firstname, familyname, birthDate, placeBirth, password, UserRole.PROFESSOR, email);
         this.phoneNumber = phoneNumber;
         this.academicLevel = academicLevel;
     }
@@ -77,11 +78,19 @@ public class Professor extends User implements Serializable{
         this.academicLevel = academicLevel;
     }
 
-    public Set<Module> getModules() {
-        return modules;
+    public Set<Module> getModulesAssist() {
+        return modulesAssist;
     }
 
-    public void setModules(Set<Module> modules) {
-        this.modules = modules;
+    public void setModulesAssist(Set<Module> modulesAssist) {
+        this.modulesAssist = modulesAssist;
+    }
+
+    public Set<Module> getModulesResponsable() {
+        return modulesResponsable;
+    }
+
+    public void setModulesResponsable(Set<Module> modulesResponsable) {
+        this.modulesResponsable = modulesResponsable;
     }
 }
