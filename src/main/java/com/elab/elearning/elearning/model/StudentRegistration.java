@@ -25,7 +25,7 @@ public class StudentRegistration {
     private String familyname;
 
     @NotNull
-    @Past
+    //@Past
     private Date birthDate;
     @NotNull
     @NotBlank

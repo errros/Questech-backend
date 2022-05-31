@@ -44,6 +44,8 @@ public class Professor extends User implements Serializable{
 
 
 
+
+
     public Professor(String firstname, String familyname, Date birthDate, String placeBirth, String password, String email, Sex sex , Set<Module> modules , String phoneNumber, String academicLevel) {
         super(firstname, familyname, birthDate, placeBirth, password, UserRole.PROFESSOR, sex ,email);
         this.modules = modules;

@@ -48,26 +48,6 @@ public class ModuleController {
 
     }
 
-    @Operation(summary = "add a professor to a module",  security = {@SecurityRequirement(name = "bearer-key")})
-    @PostMapping("/professor/{code}")
-    public Module addProfessorToModule(@PathVariable("code") String code , @RequestParam("id") Long id) {
-
-        return moduleService.addProfessorToModule(code,id);
-
-    }
-
-    @Operation(summary = "delete a professor from a module",  security = {@SecurityRequirement(name = "bearer-key")})
-    @DeleteMapping("/professor/{code}")
-    public Module deleteProfessorFromModule(@PathVariable("code") String code , @RequestParam("id") Long id) {
-
-        return moduleService.deleteProfessorFromModule(code,id);
-
-    }
-
-
-
-
-
 
 
     @DeleteMapping("/{code}")
@@ -89,6 +69,24 @@ public class ModuleController {
 
     }
 
+
+
+
+    @Operation(summary = "add a professor to a module",  security = {@SecurityRequirement(name = "bearer-key")})
+    @PostMapping("/{code}/professor")
+    public Module addProfessorToModule(@PathVariable("code") String code , @RequestParam("id") Long id) {
+
+        return moduleService.addProfessorToModule(code,id);
+
+    }
+
+    @Operation(summary = "delete a professor from a module",  security = {@SecurityRequirement(name = "bearer-key")})
+    @DeleteMapping("/{code}/professor")
+    public Module deleteProfessorFromModule(@PathVariable("code") String code , @RequestParam("id") Long id) {
+
+        return moduleService.deleteProfessorFromModule(code,id);
+
+    }
 
 
 
