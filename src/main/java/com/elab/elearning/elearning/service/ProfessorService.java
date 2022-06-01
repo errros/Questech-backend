@@ -14,6 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -68,26 +69,32 @@ public class ProfessorService {
 
         Optional<Professor> userOpt = professorRepository.findById(user1.getId());
 
-        Professor user = userOpt.get();
+if(userOpt.isPresent()) {
+    Professor user = userOpt.get();
 
-        user.setUsername(user1.getUsername());
-        user.setFamilyname(user1.getFamilyname());
+    user.setUsername(user1.getUsername());
+    user.setFamilyname(user1.getFamilyname());
 
-        user.setFirstname(user1.getFirstname());
+    user.setFirstname(user1.getFirstname());
 
-        user.setBirthDate(user1.getBirthDate());
+    user.setBirthDate(user1.getBirthDate());
 
-        user.setPlaceBirth(user1.getPlaceBirth());
+    user.setPlaceBirth(user1.getPlaceBirth());
 
+    if (Optional.ofNullable(user1.getPassword()).isPresent()) {
         user.setPassword(passwordEncoder.encode(user1.getPassword()));
 
-        user.setPhoneNumber(user1.getPhoneNumber());
 
-        user.setAcademicLevel(user1.getAcademicLevel());
+    }
+    user.setPhoneNumber(user1.getPhoneNumber());
 
-        professorRepository.save(user);
+    user.setAcademicLevel(user1.getAcademicLevel());
 
-        return professorRepository.getById(user1.getId());
+    professorRepository.save(user);
+
+    return professorRepository.getById(user1.getId());
+}else
+    throw new OpenApiResourceNotFoundException("There's no professor with this id");
     }
 
 

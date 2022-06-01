@@ -138,7 +138,7 @@ public class AdminController {
     }
 
     @PutMapping(value = "user/professor/{id}")
-    @Operation(summary = "update professor / change his password", security = {@SecurityRequirement(name = "bearer-key")})
+    @Operation(summary = "update professor , change password", security = {@SecurityRequirement(name = "bearer-key")})
     Professor update(@RequestBody  Professor professor) {
 
         return professorService.updateInfo(professor);

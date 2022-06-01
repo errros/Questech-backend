@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springdoc.api.OpenApiResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -129,24 +130,32 @@ public class StudentService {
 
 
         Student user = userOpt.get();
+        if (userOpt.isPresent()) {
+            user.setUsername(student.getUsername());
 
-        user.setUsername(student.getUsername());
+            user.setFamilyname(student.getFamilyname());
 
-        user.setFamilyname(student.getFamilyname());
+            user.setFirstname(student.getFirstname());
 
-        user.setFirstname(student.getFirstname());
+            user.setBirthDate(student.getBirthDate());
 
-        user.setBirthDate(student.getBirthDate());
+            user.setPlaceBirth(student.getPlaceBirth());
+            user.setSex(student.getSex().name());
 
-        user.setPlaceBirth(student.getPlaceBirth());
+            if (Optional.ofNullable(student.getPassword()).isPresent()) {
+                System.out.println("altering password");
+                user.setPassword(passwordEncoder.encode(student.getPassword()));
 
-        user.setPassword(passwordEncoder.encode(student.getPassword()));
+            }
 
-        studentRepository.save(user);
+            studentRepository.save(user);
 
-        return studentRepository.getById(user.getId()); }
+            return studentRepository.getById(user.getId());
+
+        }  else
 
 
+            throw new OpenApiResourceNotFoundException("no student with such an id");
+        }
 
-
-}
+    }
