@@ -35,7 +35,7 @@ public class Professor extends User implements Serializable{
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE,CascadeType.REMOVE
+            CascadeType.MERGE
     })
     @JoinTable(name = "assist",
             joinColumns = @JoinColumn(name = "profid"),
@@ -45,7 +45,7 @@ public class Professor extends User implements Serializable{
 
     @OneToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE,CascadeType.REMOVE
+            CascadeType.MERGE
     } , mappedBy = "responsable")
     private Set<Module> modulesResponsable = new HashSet<>();
 

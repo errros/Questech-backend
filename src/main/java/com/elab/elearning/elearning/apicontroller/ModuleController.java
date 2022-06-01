@@ -116,7 +116,7 @@ public class ModuleController {
     }
 
     @Operation(summary = "retrieve assistant professors of a given module",  security = {@SecurityRequirement(name = "bearer-key")})
-    @PutMapping("/{code}/assistant")
+    @GetMapping("/{code}/assistant")
     public Set<Professor> getAssistantsOfModule(@PathVariable("code") String code) {
 
         return moduleService.getAssistantsOfModule(code);

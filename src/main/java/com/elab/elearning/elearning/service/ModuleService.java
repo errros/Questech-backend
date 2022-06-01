@@ -39,6 +39,7 @@ public class ModuleService {
 
     public void delete(String code) {
 
+        //deleting the module from the assistants
           professorRepository.findAll().forEach(p->{
               boolean b = p.getModulesAssist().removeIf(t->t.getCode().equals(code));
               if(b){
@@ -47,7 +48,7 @@ public class ModuleService {
 
           });
 
-
+        //deleting the module from responsable
         professorRepository.findAll().forEach(p->{
             boolean b = p.getModulesResponsable().removeIf(t->t.getCode().equals(code));
             if(b){
@@ -57,7 +58,7 @@ public class ModuleService {
         });
 
 
-
+//delete the module
         moduleRepository.deleteById(code);
 
 
@@ -88,9 +89,11 @@ public class ModuleService {
          moduleRepository.save(m);
 
 
+         return module;
 
+     }else {
+         throw new OpenApiResourceNotFoundException("No existing module with such a code!");
      }
-      return module;
     }
 
     public Module addAssistantToModule(String code, Long id) {
@@ -160,7 +163,7 @@ public class ModuleService {
             }
 
 
-        throw new OpenApiResourceNotFoundException("deleting assistant from module operation failed");
+        throw new OpenApiResourceNotFoundException("No existing module with such a code!");
 
         }
 
