@@ -61,47 +61,61 @@ public class GroupService {
 
     }
 
-    public Student addStudentToGroup(Promo promo , Long groupid , Long studentid) {
+    public String addStudentToGroup(Promo promo , Long groupid , Set<Long> studentids) {
+
 
         Optional<Group> group = groupRepository.findById(new GroupId(promo,groupid));
 
 
-        if(group.isPresent()){
-            Optional<Student> student = studentRepository.findById(studentid);
-            if(student.isPresent()){
 
-                group.get().getStudents().add(student.get());
-                student.get().setGroup(group.get());
-                studentRepository.save(student.get());
-                groupRepository.save(group.get());
-             return student.get();
-            }
+        if(group.isPresent()) {
 
+            for (Long studentid : studentids) {
+                Optional<Student> student = studentRepository.findById(studentid);
+                if (student.isPresent()) {
 
-        }
-
-       return new Student();
-    }
-
-    public Student deleteStudentFromGroup(Promo promo, Long groupid,Long studentid) {
-
-        Optional<Group> group = groupRepository.findById(new GroupId(promo,groupid));
-        if(group.isPresent()){
-            Optional<Student> student = studentRepository.findById(studentid);
-            if(student.isPresent()) {
-                System.out.println(group.get().getStudents());
-                boolean b = group.get().getStudents().removeIf(t->t.getId()==student.get().getId());
-
-
-               groupRepository.save(group.get());
-                if(b){
-                    student.get().setGroup(null);
+                    group.get().getStudents().add(student.get());
+                    student.get().setGroup(group.get());
                     studentRepository.save(student.get());
-                     return student.get();
+                    groupRepository.save(group.get());
+                } else {
+                    throw new OpenApiResourceNotFoundException("There's no student with sucn an id!");
                 }
 
+
+            }
+
         }
 
+        return "Added successfully";
+
+    }
+
+    public String deleteStudentFromGroup(Promo promo, Long groupid, Set<Long> studentids) {
+
+        Optional<Group> group = groupRepository.findById(new GroupId(promo,groupid));
+        if(group.isPresent()){
+            for(Long studentid : studentids ) {
+                Optional<Student> student = studentRepository.findById(studentid);
+                if (student.isPresent()) {
+                    System.out.println(group.get().getStudents());
+                    boolean b = group.get().getStudents().removeIf(t -> t.getId() == student.get().getId());
+
+
+                    groupRepository.save(group.get());
+                    if (b) {
+                        student.get().setGroup(null);
+                        studentRepository.save(student.get());
+                    }
+
+                } else {
+
+                    throw new OpenApiResourceNotFoundException("There's no student with such an id!");
+                }
+
+
+            }
+            return "Deleted successfully";
     }
 
         throw new OpenApiResourceNotFoundException("delete operation hadn't beendone");

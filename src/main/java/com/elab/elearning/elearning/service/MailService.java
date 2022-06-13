@@ -38,7 +38,7 @@ public class MailService {
         mail.setSubject(MAILSUBJECT);
         mail.setText(String.format(MAILBODY,role.toLowerCase(Locale.ROOT),toEmail,password));
 
-        mailSender.send(mail);
+       mailSender.send(mail);
 
 
     }

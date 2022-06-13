@@ -71,20 +71,20 @@ public class GroupController {
 
     @Operation(summary = "add a student to a group",  security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("/{promo}/{id}/student")
-    public Student addStudentToGroup(@PathVariable("promo") Promo promo , @PathVariable("id")  Long id ,
-                                   @RequestParam("studentid") Long studentid) {
+    public @ResponseBody String addStudentToGroup(@PathVariable("promo") Promo promo , @PathVariable("id")  Long id ,
+                                   @RequestParam("studentid") Set<Long> studentids) {
 
-        return groupService.addStudentToGroup(promo,id,studentid);
+        return groupService.addStudentToGroup(promo,id,studentids);
 
     }
 
 
     @Operation(summary = "delete student from a group",  security = {@SecurityRequirement(name = "bearer-key")})
     @DeleteMapping("/{promo}/{id}/student")
-    public Student deleteStudentFromGroup(@PathVariable("promo") Promo promo , @PathVariable("id")  Long groupid ,
-                                     @RequestParam("studentid") Long studentid) {
+    public @ResponseBody String deleteStudentFromGroup(@PathVariable("promo") Promo promo , @PathVariable("id")  Long groupid ,
+                                     @RequestParam("studentid") Set<Long> studentids) {
 
-        return groupService.deleteStudentFromGroup(promo,groupid,studentid);
+        return groupService.deleteStudentFromGroup(promo,groupid,studentids);
 
     }
 
