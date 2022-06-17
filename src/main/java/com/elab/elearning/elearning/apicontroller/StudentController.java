@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/student")
 @PreAuthorize(value = "hasAuthority('STUDENT')")
 public class StudentController {
+
     @Autowired
     FileService storageService;
     @GetMapping("/courses")
