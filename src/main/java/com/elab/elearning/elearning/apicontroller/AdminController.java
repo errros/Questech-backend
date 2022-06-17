@@ -3,10 +3,7 @@ package com.elab.elearning.elearning.apicontroller;
 import com.elab.elearning.elearning.entity.*;
 import com.elab.elearning.elearning.entity.Module;
 import com.elab.elearning.elearning.message.ResponseMessage;
-import com.elab.elearning.elearning.model.ProfessorRegistration;
-import com.elab.elearning.elearning.model.Promo;
-import com.elab.elearning.elearning.model.StudentRegistration;
-import com.elab.elearning.elearning.model.UserRole;
+import com.elab.elearning.elearning.model.*;
 import com.elab.elearning.elearning.service.*;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +46,8 @@ public class AdminController {
     @Autowired
     private LocationService locationService;
 
+    @Autowired
+    private SessionService sessionService;
 
     @Operation(summary = "register a professor", description = "the user id is attributed by RDBMS", security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("/user/professor")
@@ -217,10 +217,37 @@ public class AdminController {
     }
     @DeleteMapping("location/{id}")
     @Operation(summary = "delete a location", security = {@SecurityRequirement(name = "bearer-key")})
-
     public void deleteLocation(@PathVariable("id") int id) {
         locationService.delete((long) id);
     }
+
+
+
+
+    @PostMapping("session/{day}/{promo}/{groupNum}")
+    @Operation(summary = "add sessions " ,description = "", security = {@SecurityRequirement(name = "bearer-key")})
+    public void addDaySessions(@RequestParam("day") DayOfWeek day , @RequestParam("promo") Promo promo,
+                           @RequestParam("groupNum") Long id,@RequestBody List<  @Valid  SessionRegistration> sessionRegistrations){
+
+
+     sessionService.addSessions(day,promo,id,sessionRegistrations);
+
+    }
+
+
+    @DeleteMapping("session/{day}/{promo}/{groupNum}")
+    @Operation(summary = "reset a day "
+            ,description = "reset a day is equiavalent to deleting all sessions of a group in that day",
+            security = {@SecurityRequirement(name = "bearer-key")})
+    public void resetDay(@RequestParam("day") DayOfWeek day , @RequestParam("promo") Promo promo,
+                           @RequestParam("groupNum") Long id){
+
+
+        sessionService.resetDay(day,promo,id);
+
+    }
+
+
 
 
 

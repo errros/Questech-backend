@@ -99,19 +99,24 @@ if(userOpt.isPresent()) {
 
 
 
-
+    @Transactional
     public Optional<Professor> register(ProfessorRegistration user) {
 
-        String plainpasswrod = generateRandomPassword();
-        Professor s = new Professor(user.getFirstname(), user.getFamilyname(), user.getBirthDate(), user.getPlaceBirth()
-                , passwordEncoder.encode(plainpasswrod), user.getEmail(),user.getPhoneNumber(), user.getAcademicLevel());
+        Optional<Professor> professorIsExisting = professorRepository.findByEmail(user.getEmail());
+if(professorIsExisting.isEmpty()) {
+    String plainpasswrod = generateRandomPassword();
+    Professor s = new Professor(user.getFirstname(), user.getFamilyname(), user.getBirthDate(), user.getPlaceBirth()
+            , passwordEncoder.encode(plainpasswrod), user.getEmail(), user.getPhoneNumber(), user.getAcademicLevel());
 
-        professorRepository.save(s);
+    professorRepository.save(s);
 
 
-        mailService.sendEmailtoUser(s.getEmail(), plainpasswrod, UserRole.PROFESSOR.name());
-        return professorRepository.findByEmail(s.getEmail());
+    mailService.sendEmailtoUser(s.getEmail(), plainpasswrod, UserRole.PROFESSOR.name());
+    return professorRepository.findByEmail(s.getEmail());
 
+} else {
+    throw new OpenApiResourceNotFoundException("A professor with this email exist already");
+}
 
     }
 

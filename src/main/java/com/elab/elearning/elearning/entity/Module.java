@@ -4,9 +4,7 @@ package com.elab.elearning.elearning.entity;
 import com.elab.elearning.elearning.model.Promo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -20,6 +18,11 @@ import java.util.List;
 import java.util.Set;
 
 
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode(of = {"code"})
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Module{
@@ -67,88 +70,9 @@ public class Module{
     @JsonIgnore
     private Professor responsable;
 
-
-    public Module() {
-    }
-
-
-
-
-    public Module(String code, String detailedName, Promo promo, int semester, int coefficient, int credit) {
-        this.code = code;
-        this.detailedName = detailedName;
-        this.promo = promo;
-        this.semester = semester;
-        this.coefficient = coefficient;
-        this.credit = credit;
-    }
-
-
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDetailedName() {
-        return detailedName;
-    }
-
-    public void setDetailedName(String detailedName) {
-        this.detailedName = detailedName;
-    }
-
-    public Promo getPromo() {
-        return promo;
-    }
-
-    public void setPromo(Promo promo) {
-        this.promo = promo;
-    }
-
-    public int getSemester() {
-        return semester;
-    }
-
-    public void setSemester(int semester) {
-        this.semester = semester;
-    }
-
-    public int getCoefficient() {
-        return coefficient;
-    }
-
-    public void setCoefficient(int coefficient) {
-        this.coefficient = coefficient;
-    }
-
-    public int getCredit() {
-        return credit;
-    }
-
-    public void setCredit(int credit) {
-        this.credit = credit;
-    }
-
-
-    public Set<Professor> getAssistants() {
-        return assistants;
-    }
-
-    public void setAssistants(Set<Professor> assistants) {
-        this.assistants = assistants;
-    }
-
-    public Professor getResponsable() {
-        return responsable;
-    }
-
-    public void setResponsable(Professor responsable) {
-        this.responsable = responsable;
-    }
+    @JsonIgnore
+    @OneToMany(mappedBy = "module")
+    private Set<Session> sessions = new HashSet<>();
 
     @Override
     public String toString() {
@@ -159,8 +83,6 @@ public class Module{
                 ", semester=" + semester +
                 ", coefficient=" + coefficient +
                 ", credit=" + credit +
-                ", assistants=" + assistants +
-                ", responsable=" + responsable +
                 '}';
     }
 }

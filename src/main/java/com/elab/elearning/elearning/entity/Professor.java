@@ -6,7 +6,9 @@ import com.elab.elearning.elearning.model.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -22,6 +24,8 @@ import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Professor extends User implements Serializable{
@@ -50,6 +54,10 @@ public class Professor extends User implements Serializable{
     private Set<Module> modulesResponsable = new HashSet<>();
 
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "professor")
+    private Set<Session> sessions = new HashSet<>();
+
 
 
 
@@ -62,35 +70,4 @@ public class Professor extends User implements Serializable{
     }
 
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getAcademicLevel() {
-        return academicLevel;
-    }
-
-    public void setAcademicLevel(String academicLevel) {
-        this.academicLevel = academicLevel;
-    }
-
-    public Set<Module> getModulesAssist() {
-        return modulesAssist;
-    }
-
-    public void setModulesAssist(Set<Module> modulesAssist) {
-        this.modulesAssist = modulesAssist;
-    }
-
-    public Set<Module> getModulesResponsable() {
-        return modulesResponsable;
-    }
-
-    public void setModulesResponsable(Set<Module> modulesResponsable) {
-        this.modulesResponsable = modulesResponsable;
-    }
 }

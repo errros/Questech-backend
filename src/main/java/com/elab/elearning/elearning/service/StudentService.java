@@ -35,18 +35,26 @@ public class StudentService {
     @Autowired
     private MailService mailService;
 
-
+    @Transactional
     public Optional<Student> register(StudentRegistration user) {
 
-        String plainpasswrod = generateRandomPassword();
-        Student s = new Student(user.getFirstname(),user.getFamilyname(),user.getBirthDate(),user.getPlaceBirth()
-        ,passwordEncoder.encode(plainpasswrod),user.getSex(),user.getEmail());
+         Optional<Student> studentIsExisiting = studentRepository.findByEmail(user.getEmail());
 
-        studentRepository.save(s);
+         if(studentIsExisiting.isEmpty()) {
+             String plainpasswrod = generateRandomPassword();
+             Student s = new Student(user.getFirstname(), user.getFamilyname(), user.getBirthDate(), user.getPlaceBirth()
+                     , passwordEncoder.encode(plainpasswrod), user.getSex(), user.getEmail());
 
-        mailService.sendEmailtoUser(s.getEmail(), plainpasswrod, UserRole.STUDENT.name());
 
-        return studentRepository.findByEmail(s.getEmail());
+             studentRepository.save(s);
+
+             mailService.sendEmailtoUser(s.getEmail(), plainpasswrod, UserRole.STUDENT.name());
+
+             return studentRepository.findByEmail(s.getEmail());
+
+         } else {
+             throw new OpenApiResourceNotFoundException("a student exist already with this email");
+         }
 
     }
 

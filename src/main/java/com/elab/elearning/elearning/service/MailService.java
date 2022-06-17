@@ -8,15 +8,19 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 
-
 @Service
+@Configuration
+@EnableAsync
 public class MailService {
     @Autowired
     JavaMailSender mailSender;
@@ -28,6 +32,7 @@ public class MailService {
     private static final String MAILBODY = "Welcome dear %s !\n you can find below your authentication credentials : \nemail: %s \npassword: %s";
     private static final String MAILSUBJECT = "ESI SBA E-LEARNING PLATFORM : login credentials";
 
+    @Async
     public void sendEmailtoUser(String toEmail, String password, String role) {
 
 
