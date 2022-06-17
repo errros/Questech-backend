@@ -1,6 +1,5 @@
 package com.elab.elearning.elearning.service;
 
-
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,8 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 @Service
-public class FileService {
-    private final Path root = Paths.get("Emploi");
+public class TdService {
+    private final Path root = Paths.get("Td");
 
     public void init() {
         try {
@@ -62,7 +61,4 @@ public class FileService {
         }
     }
 
-
-
 }
-

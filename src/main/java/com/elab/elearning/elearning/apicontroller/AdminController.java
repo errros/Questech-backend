@@ -48,6 +48,8 @@ public class AdminController {
 
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @Operation(summary = "register a professor", description = "the user id is attributed by RDBMS", security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("/user/professor")
@@ -181,6 +183,7 @@ public class AdminController {
         String message = "";
         try {
             storageService.save(file);
+            fileStorageService.store(file);
             message = "Uploaded successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
@@ -188,7 +191,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
         }
     }
-
 
     @Operation(summary = "add a location",  security = {@SecurityRequirement(name = "bearer-key")})
     @PostMapping("location")

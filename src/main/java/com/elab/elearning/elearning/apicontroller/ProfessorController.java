@@ -3,7 +3,10 @@ package com.elab.elearning.elearning.apicontroller;
 
 import com.elab.elearning.elearning.entity.File;
 import com.elab.elearning.elearning.message.ResponseMessage;
+import com.elab.elearning.elearning.service.CourseService;
 import com.elab.elearning.elearning.service.FileService;
+import com.elab.elearning.elearning.service.FileStorageService;
+import com.elab.elearning.elearning.service.TdService;
 import org.apache.tomcat.jni.FileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -27,13 +30,33 @@ import java.util.stream.Collectors;
 public class ProfessorController {
 
     @Autowired
-    FileService storageService;
+    CourseService storageService;
+    @Autowired
+    TdService tdService;
+    @Autowired
+    FileStorageService fileStorageService;
     @PostMapping("/upload-course")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ResponseMessage> uploadCourse(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {
+
             storageService.save(file);
+            fileStorageService.store(file);
             message = "Uploaded the course successfully: " + file.getOriginalFilename();
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+        } catch (Exception e) {
+
+            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
+    }
+    @PostMapping("/upload-td")
+    public ResponseEntity<ResponseMessage> uploadTD(@RequestParam("file") MultipartFile file) {
+        String message = "";
+        try {
+            tdService.save(file);
+            fileStorageService.store(file);
+            message = "Uploaded the td successfully: " + file.getOriginalFilename();
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
