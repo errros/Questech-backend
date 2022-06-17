@@ -3,6 +3,7 @@ package com.elab.elearning.elearning.apicontroller;
 
 import com.elab.elearning.elearning.entity.Module;
 import com.elab.elearning.elearning.entity.Professor;
+import com.elab.elearning.elearning.model.Promo;
 import com.elab.elearning.elearning.service.ModuleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -34,6 +35,13 @@ public class ModuleController {
 
     }
 
+    @GetMapping(value = "/promo")
+    @Operation(summary = "retrieve all modules of a given promo", security = {@SecurityRequirement(name = "bearer-key")})
+    List<Module> getModulesOfAPromo(@RequestParam("promo") Promo promo) {
+
+        return moduleService.getModulesOfAPromo(promo);
+
+    }
 
     @GetMapping(value = "/{code}")
     @Operation(summary = "retrieve a single module", security = {@SecurityRequirement(name = "bearer-key")})

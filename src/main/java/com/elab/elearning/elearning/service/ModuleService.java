@@ -3,6 +3,7 @@ package com.elab.elearning.elearning.service;
 
 import com.elab.elearning.elearning.entity.Module;
 import com.elab.elearning.elearning.entity.Professor;
+import com.elab.elearning.elearning.model.Promo;
 import com.elab.elearning.elearning.repository.ModuleRepository;
 import com.elab.elearning.elearning.repository.ProfessorRepository;
 import org.springdoc.api.OpenApiResourceNotFoundException;
@@ -219,6 +220,13 @@ public class ModuleService {
         }
 
 
+
+    }
+
+    public List<Module> getModulesOfAPromo(Promo promo) {
+
+      List<Module> modules = moduleRepository.findByPromo(promo);
+      return modules;
 
     }
 }
