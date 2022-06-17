@@ -31,11 +31,10 @@ public class SessionService {
     @Autowired
     private LocationRepository locationRepository;
 
-    public void addSessions(DayOfWeek day, Promo promo, Long id, List<SessionRegistration> sessionRegistrations) {
+    public void addSessions(DayOfWeek day, Promo promo, Long id, SessionRegistration sessionRegistration) {
 
 
-        //iterate through all sessions
-        sessionRegistrations.forEach(sessionRegistration -> {
+
             //check if there's a session collision aka session at same day , time for a given grouo
             GroupId groupId = new GroupId(promo, id);
             SessionId sessionId = new SessionId(day, sessionRegistration.getTime(), groupId);
@@ -80,7 +79,7 @@ public class SessionService {
             }
 
 
-        });
+
 
 
     }
@@ -142,6 +141,7 @@ public class SessionService {
     }
 
     public Set<Session> getProfessorPlanning(Long id, DayOfWeek day) {
+
 
 
      return sessionRepository.findByProfessorAndDay(id,day);
