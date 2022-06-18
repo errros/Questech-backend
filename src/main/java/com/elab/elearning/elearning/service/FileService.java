@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 @Service
 public class FileService {
-    private final Path root = Paths.get("Emploi");
+    private final Path root = Paths.get("uploads");
 
     public void init() {
         try {

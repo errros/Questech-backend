@@ -10,8 +10,10 @@ import com.elab.elearning.elearning.repository.ProfessorRepository;
 import com.elab.elearning.elearning.repository.StudentRepository;
 import com.elab.elearning.elearning.repository.UserRepository;
 import com.elab.elearning.elearning.model.UserRole;
+import com.elab.elearning.elearning.service.CourseService;
 import com.elab.elearning.elearning.service.FileService;
 import com.elab.elearning.elearning.service.ProfessorService;
+import com.elab.elearning.elearning.service.TdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +37,12 @@ public class Init implements CommandLineRunner {
     @Autowired
     private ProfessorRepository professorRepository;
     @Resource
+    private TdService tdService;
+    @Resource
+    private CourseService courseService;
+    @Resource
     FileService storageService;
+
 
 
 
@@ -78,8 +85,9 @@ public class Init implements CommandLineRunner {
         }
 
 
-//        storageService.deleteAll();
         storageService.init();
+        tdService.init();
+        courseService.init();
 
     }
 

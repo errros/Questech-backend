@@ -241,8 +241,8 @@ public class AdminController {
     @Operation(summary = "reset a day "
             ,description = "reset a day is equiavalent to deleting all sessions of a group in that day",
             security = {@SecurityRequirement(name = "bearer-key")})
-    public void resetDay(@RequestParam("day") DayOfWeek day , @RequestParam("promo") Promo promo,
-                           @RequestParam("groupNum") Long id){
+    public void resetDay(@PathVariable("day") DayOfWeek day , @PathVariable("promo") Promo promo,
+                           @PathVariable("groupNum") Long id){
 
 
         sessionService.resetDay(day,promo,id);

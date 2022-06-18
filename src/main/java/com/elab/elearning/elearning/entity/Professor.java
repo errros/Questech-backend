@@ -55,7 +55,7 @@ public class Professor extends User implements Serializable{
 
 
     @JsonIgnore
-    @OneToMany(mappedBy = "professor")
+    @OneToMany(mappedBy = "professor" , cascade = CascadeType.ALL)
     private Set<Session> sessions = new HashSet<>();
 
 

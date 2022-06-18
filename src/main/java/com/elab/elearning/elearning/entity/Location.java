@@ -28,7 +28,7 @@ public class Location {
     @Enumerated(EnumType.ORDINAL)
     private TypeLocation type;
     @JsonIgnore
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location" ,cascade = CascadeType.ALL)
     private Set<Session> sessions = new HashSet<>();
 
 
