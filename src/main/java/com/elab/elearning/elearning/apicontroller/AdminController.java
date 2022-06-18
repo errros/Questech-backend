@@ -228,8 +228,8 @@ public class AdminController {
 
     @PostMapping("session/{day}/{promo}/{groupNum}")
     @Operation(summary = "add sessions " ,description = "", security = {@SecurityRequirement(name = "bearer-key")})
-    public void addDaySessions(@RequestParam("day") DayOfWeek day , @RequestParam("promo") Promo promo,
-                           @RequestParam("groupNum") Long id,@RequestBody @Valid  SessionRegistration sessionRegistration){
+    public void addDaySessions(@PathVariable("day") DayOfWeek day , @PathVariable("promo") Promo promo,
+                               @PathVariable("groupNum") Long id,@RequestBody @Valid  SessionRegistration sessionRegistration){
 
 
      sessionService.addSessions(day,promo,id,sessionRegistration);
