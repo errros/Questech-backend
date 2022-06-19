@@ -1,5 +1,10 @@
 package com.elab.elearning.elearning.service;
 
+import com.elab.elearning.elearning.entity.FileDB;
+import com.elab.elearning.elearning.entity.Module;
+import com.elab.elearning.elearning.model.DocumentType;
+import com.elab.elearning.elearning.repository.FileRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -11,12 +16,17 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class TPService {
 
     private final Path root = Paths.get("TP");
+
+    @Autowired
+    private FileRepository fileRepository;
 
     public void init() {
         try {
@@ -78,6 +88,12 @@ public class TPService {
         } catch (IOException e) {
             throw new RuntimeException("Could not load the files!");
         }
+    }
+
+    public List<FileDB> getAllTPs(Module module){
+
+        return fileRepository.findAll().stream().filter(fileDB ->
+                fileDB.getDocumentType() == DocumentType.TP && fileDB.getModule() == module).collect(Collectors.toList());
     }
 
 

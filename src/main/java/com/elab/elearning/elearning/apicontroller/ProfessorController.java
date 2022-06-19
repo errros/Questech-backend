@@ -9,6 +9,7 @@ import com.elab.elearning.elearning.message.ResponseMessage;
 import com.elab.elearning.elearning.model.DocumentType;
 import com.elab.elearning.elearning.model.UploadDocumentRequest;
 import com.elab.elearning.elearning.repository.FileRepository;
+import com.elab.elearning.elearning.repository.ModuleRepository;
 import com.elab.elearning.elearning.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -51,7 +52,8 @@ public class ProfessorController {
     FileStorageService fileStorageService;
     @Autowired
     FileRepository fileRepository;
-
+    @Autowired
+    ModuleRepository moduleRepository;
 
     @GetMapping(value = "/professor/{id}/module")
     @Operation(summary = "get all modules a professor teach", security = {@SecurityRequirement(name = "bearer-key")})
@@ -117,7 +119,38 @@ public class ProfessorController {
     }
 
 
-    @PostMapping(value = "{modulecode}/{type}/{id}")
+
+    @GetMapping("professor/module/{code}/{type}")
+    @Operation(summary = "retrieve all courses",security = {@SecurityRequirement(name = "bearer-key")})
+    public ResponseEntity<List<FileDB>> getListCourses(@PathVariable("code") String code ,
+                                                       @PathVariable("type") DocumentType documentType                                  ) {
+
+
+        List<FileDB> documents ;
+        Module module = moduleRepository.getById(code);
+
+        if(documentType == DocumentType.COURSE) {
+            documents = courseService.getAllCourses(module);
+
+
+
+        }else if(documentType == DocumentType.TD){
+            documents = tdService.getAllTds(module);
+
+
+
+        }else {
+
+            documents = tpService.getAllTPs(module);
+
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(documents);
+
+    }
+
+    @DeleteMapping(value = "professor/{modulecode}/{type}/{id}")
     @Operation(summary = "delete a module document", security = {@SecurityRequirement(name = "bearer-key")})
     public ResponseEntity<ResponseMessage> deleteDocument(@PathVariable("modulecode") String modulecode,
                                                           @PathVariable("type") DocumentType documentType,

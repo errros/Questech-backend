@@ -1,6 +1,11 @@
 package com.elab.elearning.elearning.apicontroller;
 
 import com.elab.elearning.elearning.entity.File;
+import com.elab.elearning.elearning.entity.FileDB;
+import com.elab.elearning.elearning.entity.Module;
+import com.elab.elearning.elearning.model.DocumentType;
+import com.elab.elearning.elearning.model.Promo;
+import com.elab.elearning.elearning.repository.ModuleRepository;
 import com.elab.elearning.elearning.service.CourseService;
 import com.elab.elearning.elearning.service.FileService;
 import com.elab.elearning.elearning.service.TPService;
@@ -27,70 +32,69 @@ import java.util.stream.Collectors;
 public class StudentController {
 
     @Autowired
+    ModuleRepository moduleRepository;
+    @Autowired
     CourseService courseService;
     @Autowired
     TdService tdService;
     @Autowired
     TPService tpService;
-    
-    @GetMapping("/course")
+
+
+
+    @GetMapping("/module/{code}/{type}")
     @Operation(summary = "retrieve all courses",security = {@SecurityRequirement(name = "bearer-key")})
-    public ResponseEntity<List<File>> getListCourses() {
-        List<File> file = courseService.loadAll().map(path -> {
-            String filename = path.getFileName().toString();
-            String url = MvcUriComponentsBuilder
-                    .fromMethodName(StudentController.class, "getCourse", path.getFileName().toString()).build().toString();
-            return new File(filename, url);
-        }).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(file);
-    }
-    @GetMapping("/course/{filename:.+}")
-    @Operation(summary =  "get a course",security = {@SecurityRequirement(name = "bearer-key")})
-    public @ResponseBody ResponseEntity<Resource> getCourse(@PathVariable String filename) {
-        Resource file = courseService.load(filename);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }
-    @GetMapping("/td")
-    @Operation(summary =  "get all tds",security = {@SecurityRequirement(name = "bearer-key")})
-    public ResponseEntity<List<File>> getListTds() {
-        List<File> file = tdService.loadAll().map(path -> {
-            String filename = path.getFileName().toString();
-            String url = MvcUriComponentsBuilder
-                    .fromMethodName(StudentController.class, "getTD", path.getFileName().toString()).build().toString();
-            return new File(filename, url);
-        }).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(file);
-    }
-    @GetMapping("/td/{filename:.+}")
-    @Operation(summary =  "get a signle td",security = {@SecurityRequirement(name = "bearer-key")})
-    public @ResponseBody ResponseEntity<Resource> getTD(@PathVariable String filename) {
-        Resource file = tdService.load(filename);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }
+    public ResponseEntity<List<FileDB>> getListCourses(@PathVariable("code") String code ,
+                                                     @PathVariable("type") DocumentType documentType                                  ) {
 
 
-    @GetMapping("/tp")
-    @Operation(summary =  "get all TPs",security = {@SecurityRequirement(name = "bearer-key")})
-    public ResponseEntity<List<File>> getListTps() {
-        List<File> file = tpService.loadAll().map(path -> {
-            String filename = path.getFileName().toString();
-            String url = MvcUriComponentsBuilder
-                    .fromMethodName(StudentController.class, "getTD", path.getFileName().toString()).build().toString();
-            return new File(filename, url);
-        }).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(file);
-    }
-    @GetMapping("/tp/{filename:.+}")
-    @Operation(summary =  "get a signle TP",security = {@SecurityRequirement(name = "bearer-key")})
-    public @ResponseBody ResponseEntity<Resource> getTP(@PathVariable String filename) {
-        Resource file = tdService.load(filename);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }
+        List<FileDB> documents ;
+        Module module = moduleRepository.getById(code);
+
+        if(documentType == DocumentType.COURSE) {
+             documents = courseService.getAllCourses(module);
 
 
+
+        }else if(documentType == DocumentType.TD){
+             documents = tdService.getAllTds(module);
+
+
+
+        }else {
+
+            documents = tpService.getAllTPs(module);
+
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(documents);
+
+    }
+    @GetMapping("/{type}/{filename:.+}")
+    @Operation(summary =  "get a document",security = {@SecurityRequirement(name = "bearer-key")})
+    public @ResponseBody ResponseEntity<Resource> getCourse(@PathVariable("type") DocumentType documentType,
+                                                            @PathVariable String filename) {
+        if(documentType == DocumentType.COURSE) {
+            Resource file = courseService.load(filename);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+
+        } else if(documentType == DocumentType.TD){
+            Resource file = tdService.load(filename);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+
+
+         } else {
+            Resource file = tdService.load(filename);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+
+
+        }
+
+    }
 
 
 

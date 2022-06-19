@@ -10,11 +10,10 @@ import java.util.List;
 
 @Repository
 public interface ModuleRepository extends JpaRepository<Module,String> {
-
-    @Query
+@Query
     List<Module> findByPromo(Promo promo);
 
-
-
+    @Query
+    Module findByCode(String Code);
 
 }
