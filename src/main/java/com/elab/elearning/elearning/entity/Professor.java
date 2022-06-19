@@ -25,7 +25,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@EqualsAndHashCode(of = {"id"})
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Professor extends User implements Serializable{
 
