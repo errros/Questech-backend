@@ -214,7 +214,7 @@ public class ModuleService {
         Optional<Module> m = moduleRepository.findById(code);
         if(m.isPresent()){
 
-            return m.get().getAssistants();
+            return Set.copyOf(m.get().getAssistants());
         }else{
             throw new OpenApiResourceNotFoundException("there's no given module with such a code!");
         }

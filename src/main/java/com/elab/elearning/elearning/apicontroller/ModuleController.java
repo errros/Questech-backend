@@ -21,7 +21,7 @@ import java.util.Set;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(value = "/module")
-@PreAuthorize(value = "hasAuthority('ADMIN')")
+@PreAuthorize(value = "hasAuthority('ADMIN') or hasAuthority('PROFESSOR') or hasAuthority('STUDENT')")
 public class ModuleController {
 
     @Autowired

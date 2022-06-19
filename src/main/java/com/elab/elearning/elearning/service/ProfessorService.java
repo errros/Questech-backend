@@ -1,6 +1,7 @@
 package com.elab.elearning.elearning.service;
 
 
+import com.elab.elearning.elearning.entity.Module;
 import com.elab.elearning.elearning.entity.Professor;
 import com.elab.elearning.elearning.entity.Student;
 import com.elab.elearning.elearning.entity.User;
@@ -26,6 +27,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 
 @Service
 public class ProfessorService {
@@ -173,5 +175,9 @@ if(professorIsExisting.isEmpty()) {
         return generatedString;
     }
 
+    public Set<Module> getAssociatedModules(Long id) {
+
+         return Set.copyOf(professorRepository.getById(id).getModulesAssist());
+    }
 }
 

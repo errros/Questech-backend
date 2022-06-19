@@ -5,10 +5,7 @@ import com.elab.elearning.elearning.model.Sex;
 import com.elab.elearning.elearning.model.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -17,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +25,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(of = {"id"})
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Professor extends User implements Serializable{
 
@@ -44,7 +43,7 @@ public class Professor extends User implements Serializable{
     @JoinTable(name = "assist",
             joinColumns = @JoinColumn(name = "profid"),
             inverseJoinColumns = @JoinColumn(name = "modulecode"))
-    private Set<Module> modulesAssist = new HashSet<>();
+    private List<Module> modulesAssist = new ArrayList<>();
 
 
     @OneToMany(cascade = {

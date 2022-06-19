@@ -1,14 +1,12 @@
 package com.elab.elearning.elearning.entity;
 
+import com.elab.elearning.elearning.model.DocumentType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @NoArgsConstructor
@@ -24,12 +22,26 @@ public class FileDB {
     @Column
     private String name;
     @Column
-    private String type;
+    private String title;
+    @Column
+    private DocumentType documentType;
+    @ManyToOne
+    @JoinColumn(name = "module_reference", referencedColumnName = "code",unique = false)
+    private Module module;
 
-    public FileDB(String name, String type) {
+
+
+
+
+
+
+    public FileDB(String name ,String title, DocumentType type,Module module) {
         this.name = name;
-        this.type = type;
+        this.title = title;
+        this.documentType = type;
+        this.module = module;
 
     }
+
 
 }

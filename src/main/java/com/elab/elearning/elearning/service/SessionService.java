@@ -52,10 +52,16 @@ public class SessionService {
                         //the case when there's no module with such a code reference is not treated
 
                         Module module = moduleRepository.getById(sessionRegistration.getModuleCode());
+
                         Professor professor = professorRepository.getById(sessionRegistration.getProfessorId());
                         Location location = locationRepository.getById(sessionRegistration.getLocation());
-
                         Session session = new Session(sessionId, sessionRegistration.getType(), module, professor, location);
+
+                        //update module
+                        professor.getModulesAssist().add(module);
+                        module.getAssistants().add(professor);
+
+
                         module.getSessions().add(session);
                         professor.getSessions().add(session);
                         location.getSessions().add(session);
@@ -88,18 +94,16 @@ public class SessionService {
     public void resetDay(DayOfWeek day, Promo promo, Long id) {
 
         Set<Session> sessions = sessionRepository.findByDayAndPromoAndId(day,promo,id);
-        System.out.println("\n");
-        System.out.println(sessions.size());
+
         sessions.forEach(session -> {
-            System.out.println("BEFORE \n " + session.getModule().getSessions().size());
-                   session.getModule().getSessions().remove(session);
-            System.out.println("AFTER \n " + session.getModule().getSessions().size());
-            System.out.println("BEFORE \n " + session.getLocation().getSessions().size());
+
+
+
+
+            session.getModule().getSessions().remove(session);
             session.getLocation().getSessions().remove(session);
-            System.out.println("AFTER \n " + session.getLocation().getSessions().size());
-            System.out.println("BEFORE \n " + session.getProfessor().getSessions().size());
             session.getProfessor().getSessions().remove(session);
-            System.out.println("AFTER \n " + session.getProfessor().getSessions().size());
+
 
             locationNotAvailableRepository.deleteByDayAndTime(day,session.getSessionId().getTime());
 

@@ -17,6 +17,7 @@ import java.time.DayOfWeek;
 import java.util.Set;
 
 @RestController
+@PreAuthorize(value = "hasAuthority('ADMIN') or hasAuthority('PROFESSOR') or hasAuthority('STUDENT')")
 @CrossOrigin(origins = "*")
 public class PlanningController {
 
@@ -25,8 +26,6 @@ public class PlanningController {
 
 
 
-
-    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @GetMapping(value = "/resources/location/{day}/{time}")
     @Operation(summary = "retrieve all available locations in a given day , time ", security = {@SecurityRequirement(name = "bearer-key")})
     public Set<Location> getAvailableLocations(@PathVariable(value = "day")DayOfWeek day,
@@ -39,7 +38,6 @@ public class PlanningController {
     }
 
 
-    @PreAuthorize(value = "hasAuthority('ADMIN')")
     @GetMapping(value = "/resources/professors/{day}/{time}")
     @Operation(summary = "retrieve all available professors in a given day , time ", security = {@SecurityRequirement(name = "bearer-key")})
     public Set<Professor> getAvailableProfessors(@PathVariable(value = "day")DayOfWeek day,
@@ -53,7 +51,6 @@ public class PlanningController {
     }
 
 
-    @PreAuthorize(value = "hasAuthority('ADMIN') or hasAuthority('PROFESSOR')")
     @GetMapping(value = "/planning/{professorId}/{day}")
     @Operation(summary = "retrieve all sessions of a professor", security = {@SecurityRequirement(name = "bearer-key")})
     public  Set<Session> getProfessorPlanning(@PathVariable("professorId") Long id ,@PathVariable(value = "day") DayOfWeek day){
@@ -68,7 +65,6 @@ public class PlanningController {
 
 
 
-    @PreAuthorize(value = "hasAuthority('ADMIN') or hasAuthority('STUDENT')")
     @GetMapping(value = "/planning/{promo}/{groupNum}/{day}")
     @Operation(summary = "retrieve all sessions of a group", security = {@SecurityRequirement(name = "bearer-key")})
     public  Set<Session> getGroupPlanning(@PathVariable("promo") Promo promo ,@PathVariable("groupNum") Long id,

@@ -3,7 +3,10 @@ package com.elab.elearning.elearning.apicontroller;
 import com.elab.elearning.elearning.entity.File;
 import com.elab.elearning.elearning.service.CourseService;
 import com.elab.elearning.elearning.service.FileService;
+import com.elab.elearning.elearning.service.TPService;
 import com.elab.elearning.elearning.service.TdService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -19,19 +22,21 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(value = "/student")
-@PreAuthorize(value = "hasAuthority('STUDENT')")
+
+@PreAuthorize(value = "hasAuthority('ADMIN') or hasAuthority('PROFESSOR') or hasAuthority('STUDENT')")
 public class StudentController {
 
     @Autowired
-    CourseService storageService;
+    CourseService courseService;
     @Autowired
     TdService tdService;
     @Autowired
-    FileService fileService;
-
-    @GetMapping("/courses")
+    TPService tpService;
+    
+    @GetMapping("/course")
+    @Operation(summary = "retrieve all courses",security = {@SecurityRequirement(name = "bearer-key")})
     public ResponseEntity<List<File>> getListCourses() {
-        List<File> file = storageService.loadAll().map(path -> {
+        List<File> file = courseService.loadAll().map(path -> {
             String filename = path.getFileName().toString();
             String url = MvcUriComponentsBuilder
                     .fromMethodName(StudentController.class, "getCourse", path.getFileName().toString()).build().toString();
@@ -39,14 +44,15 @@ public class StudentController {
         }).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(file);
     }
-    @GetMapping("/courses/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> getCourse(@PathVariable String filename) {
-        Resource file = storageService.load(filename);
+    @GetMapping("/course/{filename:.+}")
+    @Operation(summary =  "get a course",security = {@SecurityRequirement(name = "bearer-key")})
+    public @ResponseBody ResponseEntity<Resource> getCourse(@PathVariable String filename) {
+        Resource file = courseService.load(filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
-    @GetMapping("/tds")
+    @GetMapping("/td")
+    @Operation(summary =  "get all tds",security = {@SecurityRequirement(name = "bearer-key")})
     public ResponseEntity<List<File>> getListTds() {
         List<File> file = tdService.loadAll().map(path -> {
             String filename = path.getFileName().toString();
@@ -56,30 +62,38 @@ public class StudentController {
         }).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(file);
     }
-    @GetMapping("/tds/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> getTD(@PathVariable String filename) {
+    @GetMapping("/td/{filename:.+}")
+    @Operation(summary =  "get a signle td",security = {@SecurityRequirement(name = "bearer-key")})
+    public @ResponseBody ResponseEntity<Resource> getTD(@PathVariable String filename) {
         Resource file = tdService.load(filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
-    @GetMapping("/emploi")
-    public ResponseEntity<List<File>> getListEmploi() {
-        List<File> file = fileService.loadAll().map(path -> {
+
+
+    @GetMapping("/tp")
+    @Operation(summary =  "get all TPs",security = {@SecurityRequirement(name = "bearer-key")})
+    public ResponseEntity<List<File>> getListTps() {
+        List<File> file = tpService.loadAll().map(path -> {
             String filename = path.getFileName().toString();
             String url = MvcUriComponentsBuilder
-                    .fromMethodName(StudentController.class, "getEmploi", path.getFileName().toString()).build().toString();
+                    .fromMethodName(StudentController.class, "getTD", path.getFileName().toString()).build().toString();
             return new File(filename, url);
         }).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(file);
     }
-    @GetMapping("/files/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> getEmploi(@PathVariable String filename) {
-        Resource file = fileService.load(filename);
+    @GetMapping("/tp/{filename:.+}")
+    @Operation(summary =  "get a signle TP",security = {@SecurityRequirement(name = "bearer-key")})
+    public @ResponseBody ResponseEntity<Resource> getTP(@PathVariable String filename) {
+        Resource file = tdService.load(filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
+
+
+
+
+
     @GetMapping
     String goStudent() {
 

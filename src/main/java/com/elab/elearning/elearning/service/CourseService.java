@@ -37,6 +37,24 @@ public class CourseService {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
     }
+
+    public void delete(String filename) {
+        try {
+            Path file = root.resolve(filename);
+            Resource resource = new UrlResource(file.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                Files.delete(file);
+
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Could not delete such a file. Error: " + e.getMessage());
+        }
+
+
+    }
+
+
     public Resource load(String filename) {
         try {
             Path file = root.resolve(filename);

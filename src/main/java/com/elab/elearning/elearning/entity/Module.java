@@ -59,7 +59,7 @@ public class Module{
             },
             mappedBy = "modulesAssist")
     @JsonIgnore
-    private Set<Professor> assistants = new HashSet<>();
+    private List<Professor> assistants = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {
@@ -73,6 +73,12 @@ public class Module{
     @JsonIgnore
     @OneToMany(mappedBy = "module")
     private Set<Session> sessions = new HashSet<>();
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "module")
+    private Set<FileDB> documents = new HashSet<>();
+
 
     @Override
     public String toString() {
