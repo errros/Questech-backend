@@ -59,7 +59,7 @@ public class Module{
             },
             mappedBy = "modulesAssist")
     @JsonIgnore
-    private List<Professor> assistants = new ArrayList<>();
+    private Set<Professor> assistants = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {

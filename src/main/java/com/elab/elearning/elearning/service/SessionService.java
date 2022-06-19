@@ -58,9 +58,13 @@ public class SessionService {
                         Session session = new Session(sessionId, sessionRegistration.getType(), module, professor, location);
 
                         //update module
-                        professor.getModulesAssist().add(module);
-                        module.getAssistants().add(professor);
 
+                        if(!professor.getModulesAssist().contains(module)) {
+                            professor.getModulesAssist().add(module);
+                            module.getAssistants().add(professor);
+
+
+                        }
 
                         module.getSessions().add(session);
                         professor.getSessions().add(session);

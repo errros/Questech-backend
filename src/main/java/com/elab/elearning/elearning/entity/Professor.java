@@ -42,7 +42,7 @@ public class Professor extends User implements Serializable{
     @JoinTable(name = "assist",
             joinColumns = @JoinColumn(name = "profid"),
             inverseJoinColumns = @JoinColumn(name = "modulecode"))
-    private List<Module> modulesAssist = new ArrayList<>();
+    private Set<Module> modulesAssist = new HashSet<>();
 
 
     @OneToMany(cascade = {
