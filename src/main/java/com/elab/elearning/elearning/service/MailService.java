@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Configuration
-@EnableAsync
 public class MailService {
     @Autowired
     JavaMailSender mailSender;

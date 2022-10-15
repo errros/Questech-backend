@@ -69,9 +69,12 @@ public class SessionService {
                         module.getSessions().add(session);
                         professor.getSessions().add(session);
                         location.getSessions().add(session);
+                     if(sessionRegistration.getType() == SessionType.COURS) {
                          ProfessorNotAvailable pnaId =new ProfessorNotAvailable(day, sessionRegistration.getTime(), professor);
-                        professorNotAvailableRepository.save(pnaId);
-                        locationNotAvailableRepository.save(new LocationNotAvailable(day, sessionRegistration.getTime(), location));
+                         professorNotAvailableRepository.save(pnaId);
+                         locationNotAvailableRepository.save(new LocationNotAvailable(day, sessionRegistration.getTime(), location));
+
+                     }
                         sessionRepository.save(session);
                         professorRepository.save(professor);
                         moduleRepository.save(module);
